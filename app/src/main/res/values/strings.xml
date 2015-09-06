@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">目覚まし時計</string>
+    <string name="menu_preference">設定</string>
+    <string name="pref_key_enabled">key_enabled</string>
+    <string name="pref_key_ringtone">key_ringtone</string>
+    <string name="pref_key_time">key_time</string>
+    <string name="pref_enabled_title">アラームオン</string>
+    <string name="pref_enabled_summary">チェックを入れるとアラームが有効になります</string>
+    <string name="pref_ringtone_title">アラーム音</string>
+    <string name="pref_ringtone_summary">アラーム音を選択します</string>
+    <string name="pref_time_title">時間</string>
+    <string name="pref_time_summary">アラームを鳴らす時間を指定します</string>
+</resources>

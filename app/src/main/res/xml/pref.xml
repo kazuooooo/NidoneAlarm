@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<CheckBoxPreference android:key="@string/pref_key_enabled"
+		android:title="@string/pref_enabled_title" android:summary="@string/pref_enabled_summary"></CheckBoxPreference>
+	<RingtonePreference android:key="@string/pref_key_ringtone"
+		android:title="@string/pref_ringtone_title" android:summary="@string/pref_ringtone_summary"
+		android:ringtoneType="alarm"></RingtonePreference>
+	<jp.co.spookies.android.alarm.TimePickerPreference
+		android:key="@string/pref_key_time" android:summary="@string/pref_time_summary"
+		android:title="@string/pref_time_title" />
+</PreferenceScreen>
