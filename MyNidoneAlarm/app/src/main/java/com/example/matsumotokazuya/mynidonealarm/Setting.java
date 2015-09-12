@@ -3,6 +3,7 @@ package com.example.matsumotokazuya.mynidonealarm;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -40,5 +41,11 @@ public class Setting extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+@Override
+    public void onPause(){
+    super.onPause();
+    //Timerの設定値を保存
+    Log.d("Destroy","onpause call");
+    AlarmHome.settingTime = Integer.parseInt(timerSettingText.getText().toString());
+    }
 }

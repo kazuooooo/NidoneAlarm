@@ -22,7 +22,7 @@ public class AlarmHome extends AppCompatActivity {
     private TextView countText;
     private Button timerButton;
     private String timerButtonText;
-    private EditText settingTime;
+    public static int settingTime = 0;
     private int minutes = 0;
     private int seconds = 0;
     private Handler mHandler = new Handler();
@@ -30,15 +30,22 @@ public class AlarmHome extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_alarm_home);
         //タイマーのテキストビューを取得
         countText = (TextView)findViewById(R.id.timer);
-        //設定から書いてある時間を取得
+        //タイマーのボタン
         timerButton =(Button)findViewById(R.id.TestButton);
-        settingTime = (EditText)findViewById(R.id.SettingTime);
-        Log.e("time", settingTime.toString());
-        timerButtonText = timerButton.getText().toString();
-        minutes = Integer.parseInt(timerButtonText);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Log.d("my","onresume");
+        //タイマーのボタンに反映
+        timerButton.setText((CharSequence) String.valueOf(settingTime));
+        //内部的な時間にも設定
+        minutes =settingTime;
         seconds = minutes*60;
     }
 
@@ -77,6 +84,7 @@ public class AlarmHome extends AppCompatActivity {
         this.mainTimer = new Timer();
         //タスククラスインスタンスを作成
         this.mainTimerTask = new MainTimerTask();
+
         //タイマースケジュールを設定
         this.mainTimer.schedule(mainTimerTask, 1000, 1000);
 
