@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MyNidoneAlarm</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_setting">Setting</string>
+    <string name="test">this is test</string>
+    <string name="timerbuttontext">30</string>
+</resources>
