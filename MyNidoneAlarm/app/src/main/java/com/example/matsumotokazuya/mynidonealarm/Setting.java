@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 public class Setting extends AppCompatActivity {
     private EditText timerSettingText;
@@ -46,6 +47,10 @@ public class Setting extends AppCompatActivity {
     super.onPause();
     //Timerの設定値を保存
     Log.d("Destroy","onpause call");
-    AlarmHome.settingTime = Integer.parseInt(timerSettingText.getText().toString());
+    SettingValues.settingTime = Integer.parseInt(timerSettingText.getText().toString());
+    SettingValues.alarmTimeHour = ((TimePicker)findViewById(R.id.timePicker)).getCurrentHour();
+    SettingValues.alarmTimeMinutes = ((TimePicker)findViewById(R.id.timePicker)).getCurrentMinute();
+    LogUtil.LogInt(SettingValues.alarmTimeHour);
+    LogUtil.LogInt(SettingValues.alarmTimeMinutes);
     }
 }

@@ -14,6 +14,10 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 import android.os.Handler;
+import java.util.Calendar;
+import android.app.PendingIntent;
+import android.app.AlarmManager;
+import android.widget.Toast;
 
 
 public class AlarmHome extends AppCompatActivity {
@@ -22,7 +26,6 @@ public class AlarmHome extends AppCompatActivity {
     private TextView countText;
     private Button timerButton;
     private String timerButtonText;
-    public static int settingTime = 0;
     private int minutes = 0;
     private int seconds = 0;
     private Handler mHandler = new Handler();
@@ -36,6 +39,8 @@ public class AlarmHome extends AppCompatActivity {
         countText = (TextView)findViewById(R.id.timer);
         //タイマーのボタン
         timerButton =(Button)findViewById(R.id.TestButton);
+        ///ここからアラーム
+        Button btn1 = (Button)this.findViewById(R.id.AlarmTestButton);
     }
 
     @Override
@@ -43,9 +48,9 @@ public class AlarmHome extends AppCompatActivity {
         super.onResume();
         Log.d("my","onresume");
         //タイマーのボタンに反映
-        timerButton.setText((CharSequence) String.valueOf(settingTime));
+        timerButton.setText((CharSequence) String.valueOf(SettingValues.settingTime));
         //内部的な時間にも設定
-        minutes =settingTime;
+        minutes =SettingValues.settingTime;
         seconds = minutes*60;
     }
 
@@ -110,5 +115,47 @@ public class AlarmHome extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void AlarmTest(View view){
+        //時間をセット
+        Calendar calendar = Calendar.getInstance();
+        //Calendarを使って現在の時間をミリ秒で取得
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        //5秒後に設定
+        calendar.add(Calendar.SECOND,5);
+
+        Intent intent = new Intent(getApplicationContext(),AlarmBroadcastReceiver.class);
+        PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
+
+        //アラームをセットする
+        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+        am.set(AlarmManager.RTC,calendar.getTimeInMillis(),pending);
+
+        Toast.makeText(getApplicationContext(),"SetAlarm",Toast.LENGTH_LONG).show();
+    }
+
+    private void SetAlarms(){
+        //現在日付、時刻を取得
+        Calendar calendar = Calendar.getInstance();
+
+    }
+
+    private void SetAlarmByDate(int year,int month,int date,int hourOfDay,int minute){
+        int alarmId = 1;
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.MONTH,month);
+        calendar.set(Calendar.DATE,date);
+        calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+        calendar.set(Calendar.MINUTE,minute);
+
+        Intent intent = new Intent(getApplicationContext(), AlarmBroadcastReceiver.class);
+        intent.putExtra("intentId", 2);
+        PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(),alarmId , intent, 0);
+        alarmId++;
+        //アラームをセットする
+        AlarmManager am = (AlarmManager)AlarmHome.this.getSystemService(ALARM_SERVICE);
+        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending);
     }
 }

@@ -16,8 +16,25 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/SettingTime"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:text="0" />
+        android:text="0"
+        android:layout_below="@+id/timePicker"
+        android:layout_centerHorizontal="true" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Alarm"
+        android:id="@+id/switch1"
+        android:layout_below="@+id/test"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timePicker"
+        android:layout_below="@+id/switch1"
+        android:layout_alignLeft="@+id/timePicker"
+        android:layout_alignStart="@+id/timePicker" />
 
 </RelativeLayout>
