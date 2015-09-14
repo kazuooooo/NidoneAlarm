@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TimePicker;
+
+import java.util.HashMap;
 
 public class Setting extends AppCompatActivity {
     private EditText timerSettingText;
@@ -50,7 +53,21 @@ public class Setting extends AppCompatActivity {
     SettingValues.settingTime = Integer.parseInt(timerSettingText.getText().toString());
     SettingValues.alarmTimeHour = ((TimePicker)findViewById(R.id.timePicker)).getCurrentHour();
     SettingValues.alarmTimeMinutes = ((TimePicker)findViewById(R.id.timePicker)).getCurrentMinute();
+    //曜日のチェック情報を保存
+    SaveDOWChecks();
     LogUtil.LogInt(SettingValues.alarmTimeHour);
     LogUtil.LogInt(SettingValues.alarmTimeMinutes);
+    }
+
+    private void SaveDOWChecks(){
+        HashMap<String,Boolean> maps = new HashMap<String,Boolean>();
+        maps.put("Mon",((CheckBox)findViewById(R.id.checkMonday)).isChecked());
+        maps.put("Tue",((CheckBox)findViewById(R.id.checkTuesday)).isChecked());
+        maps.put("Wed",((CheckBox)findViewById(R.id.checkWednesday)).isChecked());
+        maps.put("Thu",((CheckBox)findViewById(R.id.checkThursday)).isChecked());
+        maps.put("Fri",((CheckBox)findViewById(R.id.checkFriday)).isChecked());
+        maps.put("Sat",((CheckBox)findViewById(R.id.checkSaturday)).isChecked());
+        maps.put("Sun",((CheckBox)findViewById(R.id.checkSunday)).isChecked());
+        SettingValues.daycheckMap = maps;
     }
 }

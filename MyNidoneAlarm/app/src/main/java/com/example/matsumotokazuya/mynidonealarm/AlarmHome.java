@@ -10,11 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 import android.os.Handler;
 import java.util.Calendar;
+import java.util.logging.Logger;
+
 import android.app.PendingIntent;
 import android.app.AlarmManager;
 import android.widget.Toast;
@@ -46,12 +49,14 @@ public class AlarmHome extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        Log.d("my","onresume");
+        Log.d("my", "onresume");
         //タイマーのボタンに反映
         timerButton.setText((CharSequence) String.valueOf(SettingValues.settingTime));
         //内部的な時間にも設定
         minutes =SettingValues.settingTime;
         seconds = minutes*60;
+
+
     }
 
     @Override
@@ -92,6 +97,8 @@ public class AlarmHome extends AppCompatActivity {
 
         //タイマースケジュールを設定
         this.mainTimer.schedule(mainTimerTask, 1000, 1000);
+        LogUtil.LogString("Calllllllll");
+        SetAlarms();
 
     }
 
@@ -136,9 +143,11 @@ public class AlarmHome extends AppCompatActivity {
     }
 
     private void SetAlarms(){
-        //現在日付、時刻を取得
-        Calendar calendar = Calendar.getInstance();
-
+        //設定時間と今の時間を比較してアラームが鳴るのが今日か明日かを決定
+        boolean isTommorow = GetTodayOrTommorowByTime(SettingValues.alarmTimeHour, SettingValues.alarmTimeMinutes);
+        //設定時間の曜日を取得
+        String dayOfWeek = GetDayOfWeekByTime(isTommorow);
+        LogUtil.LogString(dayOfWeek);
     }
 
     private void SetAlarmByDate(int year,int month,int date,int hourOfDay,int minute){
@@ -157,5 +166,51 @@ public class AlarmHome extends AppCompatActivity {
         //アラームをセットする
         AlarmManager am = (AlarmManager)AlarmHome.this.getSystemService(ALARM_SERVICE);
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending);
+    }
+
+    private String GetDayOfWeekByTime(boolean isTommorow){
+        String dayOfWeek = "no";
+        Calendar calendar = Calendar.getInstance();
+        if(isTommorow){
+            calendar.set(Calendar.DATE,calendar.get(Calendar.DATE)+1);
+        }
+        int DOWNum = calendar.get(Calendar.DAY_OF_WEEK);
+        switch(DOWNum){
+            case Calendar.MONDAY:
+                dayOfWeek = "Mon";
+                break;
+            case Calendar.TUESDAY:
+                dayOfWeek = "Tue";
+                break;
+            case Calendar.WEDNESDAY:
+                dayOfWeek = "Wed";
+                break;
+            case Calendar.THURSDAY:
+                dayOfWeek = "Thu";
+                break;
+            case Calendar.FRIDAY:
+                dayOfWeek = "Fri";
+                break;
+            case Calendar.SATURDAY:
+                dayOfWeek = "Sat";
+                break;
+            case Calendar.SUNDAY:
+                dayOfWeek = "Sun";
+                break;
+        }
+        return  dayOfWeek;
+    }
+    private boolean GetTodayOrTommorowByTime(int hour,int minutes) {
+        Calendar calendar = Calendar.getInstance();
+        boolean isTommorow = false;
+        if (calendar.get(Calendar.HOUR_OF_DAY) > SettingValues.alarmTimeHour) {
+            isTommorow = true;
+        } else if (calendar.get(Calendar.HOUR_OF_DAY) == SettingValues.alarmTimeHour) {
+            if (calendar.get(Calendar.MINUTE) > SettingValues.alarmTimeMinutes) {
+                isTommorow = true;
+            }
+        }
+        LogUtil.LogString("istommorow"+isTommorow);
+        return  isTommorow;
     }
 }

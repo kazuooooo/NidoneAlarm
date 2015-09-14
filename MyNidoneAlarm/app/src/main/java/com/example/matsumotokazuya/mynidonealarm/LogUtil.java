@@ -9,4 +9,8 @@ public class LogUtil {
     public static void LogInt(int val){
         Log.d("log",String.valueOf(val));
     }
+
+    public static  void LogString(String val){
+        Log.d("my",val);
+    }
 }
