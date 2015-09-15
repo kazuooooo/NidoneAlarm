@@ -1,6 +1,8 @@
 package com.example.matsumotokazuya.mynidonealarm;
 
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,6 +34,8 @@ public class AlarmHome extends AppCompatActivity {
     private int minutes = 0;
     private int seconds = 0;
     private Handler mHandler = new Handler();
+    private SoundPool mSoundPool;
+    private int mSoundId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +59,15 @@ public class AlarmHome extends AppCompatActivity {
         //内部的な時間にも設定
         minutes =SettingValues.settingTime;
         seconds = minutes*60;
+        //アラーム音を読み込み
+        mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
+        mSoundId = mSoundPool.load(getApplicationContext(),R.raw.se_maoudamashii_chime14,0);
 
+    }
 
+    private void PlaySound(){
+        LogUtil.LogString("playsound");
+        mSoundPool.play(mSoundId,1.0f,1.0f,0,0,1.0f);
     }
 
     @Override
@@ -99,6 +110,7 @@ public class AlarmHome extends AppCompatActivity {
         this.mainTimer.schedule(mainTimerTask, 1000, 1000);
         LogUtil.LogString("Calllllllll");
         SetAlarms();
+        PlaySound();
 
     }
 
@@ -143,29 +155,38 @@ public class AlarmHome extends AppCompatActivity {
     }
 
     private void SetAlarms(){
+
         //設定時間と今の時間を比較してアラームが鳴るのが今日か明日かを決定
         boolean isTommorow = GetTodayOrTommorowByTime(SettingValues.alarmTimeHour, SettingValues.alarmTimeMinutes);
         //設定時間の曜日を取得
         String dayOfWeek = GetDayOfWeekByTime(isTommorow);
-        LogUtil.LogString(dayOfWeek);
+        //調べた曜日にアラームが設定されているか確認
+        if(SettingValues.daycheckMap.get(dayOfWeek)){
+            Calendar cal = Calendar.getInstance();
+            if(isTommorow){
+                cal.add(Calendar.DATE,1);
+            }
+            cal.set(Calendar.HOUR_OF_DAY,SettingValues.alarmTimeHour);
+            cal.set(Calendar.MINUTE,SettingValues.alarmTimeMinutes);
+            SetAlarmByDate(cal);
+        }else{
+            LogUtil.LogString(dayOfWeek+"day is not setting");
+        }
     }
 
-    private void SetAlarmByDate(int year,int month,int date,int hourOfDay,int minute){
-        int alarmId = 1;
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR,year);
-        calendar.set(Calendar.MONTH,month);
-        calendar.set(Calendar.DATE,date);
-        calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-        calendar.set(Calendar.MINUTE,minute);
+    private void SetAlarmByDate(Calendar settingCal){
+        //Monthに1足す
+        settingCal.add(Calendar.MONTH,1);
 
+        int alarmId = 1;
         Intent intent = new Intent(getApplicationContext(), AlarmBroadcastReceiver.class);
         intent.putExtra("intentId", 2);
         PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(),alarmId , intent, 0);
         alarmId++;
         //アラームをセットする
         AlarmManager am = (AlarmManager)AlarmHome.this.getSystemService(ALARM_SERVICE);
-        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending);
+        am.set(AlarmManager.RTC_WAKEUP, settingCal.getTimeInMillis(), pending);
+        LogUtil.LogString(settingCal.toString());
     }
 
     private String GetDayOfWeekByTime(boolean isTommorow){
