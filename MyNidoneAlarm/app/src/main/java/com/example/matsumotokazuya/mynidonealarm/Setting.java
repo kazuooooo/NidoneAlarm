@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TimePicker;
 
 import java.util.HashMap;
@@ -48,11 +49,14 @@ public class Setting extends AppCompatActivity {
 @Override
     public void onPause(){
     super.onPause();
+    //アラームのOn/Off
+    SettingValues.isAlarmSet = ((Switch)findViewById(R.id.isAlarmActive)).isChecked();
     //Timerの設定値を保存
     Log.d("Destroy","onpause call");
     SettingValues.settingTime = Integer.parseInt(timerSettingText.getText().toString());
     SettingValues.alarmTimeHour = ((TimePicker)findViewById(R.id.timePicker)).getCurrentHour();
     SettingValues.alarmTimeMinutes = ((TimePicker)findViewById(R.id.timePicker)).getCurrentMinute();
+
     //曜日のチェック情報を保存
     SaveDOWChecks();
     LogUtil.LogInt(SettingValues.alarmTimeHour);

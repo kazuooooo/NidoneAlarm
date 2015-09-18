@@ -23,8 +23,9 @@
         android:id="@+id/timer"
         android:textSize="70sp"
         android:textStyle="bold"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/TestButton"
+        android:layout_toLeftOf="@+id/imageButton"
+        android:layout_toStartOf="@+id/imageButton" />
 
     <Button
         android:layout_width="wrap_content"
@@ -36,14 +37,11 @@
         android:layout_marginBottom="65dp"
         android:onClick="OnStartTimer" />
 
-    <Button
+    <AnalogClock
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="AlarmTest"
-        android:id="@+id/AlarmTestButton"
-        android:layout_alignBottom="@+id/imageButton"
-        android:layout_alignRight="@+id/TestButton"
-        android:layout_alignEnd="@+id/TestButton"
-        android:onClick="AlarmTest" />
+        android:id="@+id/analogClock"
+        android:layout_above="@+id/timer"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

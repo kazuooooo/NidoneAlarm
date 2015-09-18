@@ -34,8 +34,9 @@ public class AlarmHome extends AppCompatActivity {
     private int minutes = 0;
     private int seconds = 0;
     private Handler mHandler = new Handler();
-    private SoundPool mSoundPool;
-    private int mSoundId;
+    public static SoundPool mSoundPool;
+    public static int mSoundId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +47,11 @@ public class AlarmHome extends AppCompatActivity {
         countText = (TextView)findViewById(R.id.timer);
         //タイマーのボタン
         timerButton =(Button)findViewById(R.id.TestButton);
-        ///ここからアラーム
-        Button btn1 = (Button)this.findViewById(R.id.AlarmTestButton);
+        //テスト
+        mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
+        mSoundId = mSoundPool.load(getApplicationContext(),R.raw.se_maoudamashii_chime14,0);
+        LogUtil.LogString("OnCreateCall");
+       // AlarmTest();
     }
 
     @Override
@@ -59,16 +63,13 @@ public class AlarmHome extends AppCompatActivity {
         //内部的な時間にも設定
         minutes =SettingValues.settingTime;
         seconds = minutes*60;
-        //アラーム音を読み込み
-        mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
-        mSoundId = mSoundPool.load(getApplicationContext(),R.raw.se_maoudamashii_chime14,0);
-
+        //初回起動じゃなければアラームを設定
+        if(SettingValues.isAlarmSet){
+        SetAlarms();
+        }
     }
 
-    private void PlaySound(){
-        LogUtil.LogString("playsound");
-        mSoundPool.play(mSoundId,1.0f,1.0f,0,0,1.0f);
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,9 +110,7 @@ public class AlarmHome extends AppCompatActivity {
         //タイマースケジュールを設定
         this.mainTimer.schedule(mainTimerTask, 1000, 1000);
         LogUtil.LogString("Calllllllll");
-        SetAlarms();
-        PlaySound();
-
+        //SetAlarms();
     }
 
     public class MainTimerTask extends TimerTask {
@@ -136,23 +135,7 @@ public class AlarmHome extends AppCompatActivity {
         }
     }
 
-    public void AlarmTest(View view){
-        //時間をセット
-        Calendar calendar = Calendar.getInstance();
-        //Calendarを使って現在の時間をミリ秒で取得
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        //5秒後に設定
-        calendar.add(Calendar.SECOND,5);
 
-        Intent intent = new Intent(getApplicationContext(),AlarmBroadcastReceiver.class);
-        PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
-
-        //アラームをセットする
-        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-        am.set(AlarmManager.RTC,calendar.getTimeInMillis(),pending);
-
-        Toast.makeText(getApplicationContext(),"SetAlarm",Toast.LENGTH_LONG).show();
-    }
 
     private void SetAlarms(){
 
@@ -174,19 +157,40 @@ public class AlarmHome extends AppCompatActivity {
         }
     }
 
-    private void SetAlarmByDate(Calendar settingCal){
-        //Monthに1足す
-        settingCal.add(Calendar.MONTH,1);
 
-        int alarmId = 1;
-        Intent intent = new Intent(getApplicationContext(), AlarmBroadcastReceiver.class);
-        intent.putExtra("intentId", 2);
-        PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(),alarmId , intent, 0);
-        alarmId++;
+    public void AlarmTest(){
+        //時間をセット
+        Calendar calendar = Calendar.getInstance();
+        //Calendarを使って現在の時間をミリ秒で取得
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        //5秒後に設定
+        calendar.add(Calendar.SECOND,5);
+
+        Intent intent = new Intent(getApplicationContext(),AlarmBroadcastReceiver.class);
+        PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
+
         //アラームをセットする
-        AlarmManager am = (AlarmManager)AlarmHome.this.getSystemService(ALARM_SERVICE);
-        am.set(AlarmManager.RTC_WAKEUP, settingCal.getTimeInMillis(), pending);
-        LogUtil.LogString(settingCal.toString());
+        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+        am.set(AlarmManager.RTC,calendar.getTimeInMillis(),pending);
+
+        Toast.makeText(getApplicationContext(),"SetAlarm",Toast.LENGTH_LONG).show();
+        LogUtil.LogString("END Alarm TEST");
+    }
+
+    private void SetAlarmByDate(Calendar settingCal){
+        //時間をセット
+        Calendar calendar = settingCal;
+        //Monthに1足す
+        calendar.add(Calendar.MONTH,1);
+
+        Intent intent = new Intent(getApplicationContext(),AlarmBroadcastReceiver.class);
+        PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
+
+        //アラームをセットする
+        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+        am.set(AlarmManager.RTC,calendar.getTimeInMillis(),pending);
+
+        Toast.makeText(getApplicationContext(),"SetAlarm",Toast.LENGTH_LONG).show();
     }
 
     private String GetDayOfWeekByTime(boolean isTommorow){
