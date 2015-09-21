@@ -11,6 +11,9 @@ import android.media.SoundPool;
 import android.support.v7.app.NotificationCompat;
 import android.widget.Toast;
 
+import java.net.URI;
+import android.net.Uri;
+
 /**
  * Created by matsumotokazuya on 2015/09/13.
  */
@@ -28,6 +31,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         // RecieverからMainActivityを起動させる
         Intent intent2 = new Intent(context, AlarmHome.class);
 
+        Uri path = Uri.parse("android.resource://com.example.matsumotokazuya.mynidonealarm/" + R.raw.se_maoudamashii_chime14);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, bid, intent2, 0);
 
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -39,10 +43,12 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 .setContentTitle("TestAlarm2")
                 .setContentText("時間になりました")
                         // 音、バイブレート、LEDで通知
-                .setDefaults(Notification.DEFAULT_ALL)
+              //  .setDefaults(Notification.DEFAULT_ALL)
                         // 通知をタップした時にMainActivityを立ち上げる
                 .setContentIntent(pendingIntent)
+                .setSound(path)
                 .build();
+
 
         // 古い通知を削除
         notificationManager.cancelAll();
@@ -50,7 +56,4 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         notificationManager.notify(R.string.app_name, notification);
     }
 
-    private void TEST(){
-        LogUtil.LogString("test");
-    }
 }

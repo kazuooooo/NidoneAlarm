@@ -51,7 +51,7 @@ public class AlarmHome extends AppCompatActivity {
         mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
         mSoundId = mSoundPool.load(getApplicationContext(),R.raw.se_maoudamashii_chime14,0);
         LogUtil.LogString("OnCreateCall");
-        //AlarmTest();
+        AlarmTest();
     }
 
     @Override
