@@ -7,10 +7,6 @@
     tools:context="com.example.matsumotokazuya.mynidonealarm.Setting"
     android:id="@+id/rlayout">
 
-    <TextView android:text="@string/test" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/test" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +22,6 @@
         android:layout_height="wrap_content"
         android:text="Alarm"
         android:id="@+id/isAlarmActive"
-        android:layout_below="@+id/test"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         />

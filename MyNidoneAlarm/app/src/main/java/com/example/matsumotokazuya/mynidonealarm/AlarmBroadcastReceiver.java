@@ -48,6 +48,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 .setContentIntent(pendingIntent)
                 .setSound(path)
                 .build();
+        notification.flags = Notification.FLAG_INSISTENT;
 
 
         // 古い通知を削除
