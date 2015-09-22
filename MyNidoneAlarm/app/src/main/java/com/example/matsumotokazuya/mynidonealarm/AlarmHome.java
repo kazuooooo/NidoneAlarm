@@ -1,5 +1,7 @@
 package com.example.matsumotokazuya.mynidonealarm;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -238,5 +240,10 @@ public class AlarmHome extends AppCompatActivity {
         }
         LogUtil.LogString("istommorow"+isTommorow);
         return  isTommorow;
+    }
+
+    public  void onPushStopButton(View view){
+       NotificationManager notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
     }
 }

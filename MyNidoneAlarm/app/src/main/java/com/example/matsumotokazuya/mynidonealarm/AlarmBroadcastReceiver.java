@@ -22,6 +22,7 @@ import android.net.Uri;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
+    public static  NotificationManager notificationManager;
     @Override
     public void onReceive(Context context,Intent intent){
         //効かない多分onReceive内でできることが限られている
@@ -34,7 +35,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         Uri path = Uri.parse("android.resource://com.example.matsumotokazuya.mynidonealarm/" + R.raw.se_maoudamashii_chime14);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, bid, intent2, 0);
 
-        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Notification notification = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_launcher)
