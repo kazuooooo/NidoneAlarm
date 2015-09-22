@@ -53,7 +53,7 @@ public class AlarmHome extends AppCompatActivity {
         mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
         mSoundId = mSoundPool.load(getApplicationContext(),R.raw.se_maoudamashii_chime14,0);
         LogUtil.LogString("OnCreateCall");
-        AlarmTest();
+        //AlarmTest();
     }
 
     @Override
@@ -112,26 +112,36 @@ public class AlarmHome extends AppCompatActivity {
 
         //タイマースケジュールを設定
         this.mainTimer.schedule(mainTimerTask, 1000, 1000);
-        LogUtil.LogString("Calllllllll");
-        //SetAlarms();
+
     }
 
     public class MainTimerTask extends TimerTask {
         @Override
         public void run() {
             //ここに定周期で実行したい処理を記述します
-            mHandler.post( new Runnable() {
+            mHandler.post(new Runnable() {
                 public void run() {
 
                     //1秒引く
                     seconds -= 1;
                     //秒を分に変換
-                    int currentMinute = (int)seconds/60;
-                    int currentSeconds = seconds - 60*currentMinute;
+                    int currentMinute = (int) seconds / 60;
+                    int currentSeconds = seconds - 60 * currentMinute;
+                    String minuteString = String.valueOf(currentMinute);
+                    String secondString = String.valueOf(currentSeconds);
+                    if (currentMinute < 10) {
+                        minuteString = "0" + minuteString;
+                    }
+                    if (currentSeconds < 10) {
+                        secondString = "0" + secondString;
+                    }
                     //画面にカウントを表示
-                    countText.setText(String.valueOf(currentMinute)+":"+String.valueOf(currentSeconds));
-                    if(minutes == 0){
-                        countText.setText("End");
+                    countText.setText(minuteString + ":" + secondString);
+                    if (seconds == 0) {
+                        //即アラーム発生
+                        Calendar cal = Calendar.getInstance();
+                        SetAlarmByDate(cal);
+                        mainTimer.cancel();
                     }
                 }
             });
@@ -163,28 +173,30 @@ public class AlarmHome extends AppCompatActivity {
 
     public void AlarmTest(){
         //時間をセット
-        Calendar calendar = Calendar.getInstance();
-        //Calendarを使って現在の時間をミリ秒で取得
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        //5秒後に設定
-        calendar.add(Calendar.SECOND,5);
-
-        Intent intent = new Intent(getApplicationContext(),AlarmBroadcastReceiver.class);
-        PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
-
-        //アラームをセットする
-        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-        am.set(AlarmManager.RTC,calendar.getTimeInMillis(),pending);
-        LogUtil.LogString("calendar cont"+calendar.toString());
-        LogUtil.LogString("set alarm"+CalendarUtil.GetCalendarInfo(calendar));
-
-        Toast.makeText(getApplicationContext(),"SetAlarm",Toast.LENGTH_LONG).show();
-        LogUtil.LogString("END Alarm TEST");
+//        Calendar calendar = Calendar.getInstance();
+//        //Calendarを使って現在の時間をミリ秒で取得
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+//        //5秒後に設定
+//        calendar.add(Calendar.SECOND,5);
+//
+//        Intent intent = new Intent(getApplicationContext(),AlarmBroadcastReceiver.class);
+//        PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
+//
+//        //アラームをセットする
+//        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+//        am.set(AlarmManager.RTC,calendar.getTimeInMillis(),pending);
+//        LogUtil.LogString("calendar cont"+calendar.toString());
+//        LogUtil.LogString("set alarm"+CalendarUtil.GetCalendarInfo(calendar));
+//
+//        Toast.makeText(getApplicationContext(),"SetAlarm",Toast.LENGTH_LONG).show();
+//        LogUtil.LogString("END Alarm TEST");
     }
 
     private void SetAlarmByDate(Calendar settingCal){
         //時間をセット
         Calendar calendar = settingCal;
+        //1秒ずらす
+        calendar.add(Calendar.SECOND,1);
 
         Intent intent = new Intent(getApplicationContext(),AlarmBroadcastReceiver.class);
         PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
@@ -192,6 +204,7 @@ public class AlarmHome extends AppCompatActivity {
         //アラームをセットする
         AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
         am.set(AlarmManager.RTC, calendar.getTimeInMillis(), pending);
+        LogUtil.LogString(("current time"+CalendarUtil.GetCalendarInfo(Calendar.getInstance())));
         LogUtil.LogString("set alarm" + CalendarUtil.GetCalendarInfo(calendar));
         Toast.makeText(getApplicationContext(),"SetAlarm",Toast.LENGTH_LONG).show();
     }

@@ -23,25 +23,25 @@
         android:id="@+id/timer"
         android:textSize="70sp"
         android:textStyle="bold"
-        android:layout_above="@+id/TestButton"
+        android:layout_below="@+id/analogClock"
         android:layout_toLeftOf="@+id/imageButton"
-        android:layout_toStartOf="@+id/imageButton" />
+        android:layout_toStartOf="@+id/imageButton"
+        android:layout_marginTop="60dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/timerbuttontext"
         android:id="@+id/TestButton"
+        android:onClick="OnStartTimer"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="65dp"
-        android:onClick="OnStartTimer" />
+        android:layout_centerHorizontal="true" />
 
     <AnalogClock
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/analogClock"
-        android:layout_above="@+id/timer"
+        android:layout_below="@+id/stopButton"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -50,7 +50,7 @@
         android:text="Stop"
         android:id="@+id/stopButton"
         android:onClick="onPushStopButton"
-        android:layout_alignParentBottom="true"
+        android:layout_alignBottom="@+id/imageButton"
         android:layout_alignLeft="@+id/TestButton"
         android:layout_alignStart="@+id/TestButton" />
 
