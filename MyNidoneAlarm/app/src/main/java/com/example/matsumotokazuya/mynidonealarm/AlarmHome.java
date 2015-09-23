@@ -8,9 +8,12 @@ import android.media.SoundPool;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SurfaceView;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,6 +39,8 @@ public class AlarmHome extends AppCompatActivity {
     public static SoundPool mSoundPool;
     public static int mSoundId;
     private EditText timerSettingText;
+    private SurfaceView surface;
+    public static boolean isAlarmRinging;
 
 
     @Override
@@ -49,11 +54,31 @@ public class AlarmHome extends AppCompatActivity {
         timerButton =(Button)findViewById(R.id.TimerButton);
         //タイマーの設定テキスト編集
         timerSettingText = (EditText)findViewById(R.id.TimerSettingText);
+        //Surface
+        surface = (SurfaceView)findViewById(R.id.surfaceView);
         //テスト
         mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
         mSoundId = mSoundPool.load(getApplicationContext(),R.raw.se_maoudamashii_chime14,0);
-        LogUtil.LogString("OnCreateCall");
-        //AlarmTest();
+
+        timerSettingText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                //EnterKeyが押されたかを判定
+                if (event.getAction() == KeyEvent.ACTION_DOWN
+                        && keyCode == KeyEvent.KEYCODE_ENTER) {
+
+                    //ソフトキーボードを閉じる
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                    StartTimer();
+
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -65,6 +90,8 @@ public class AlarmHome extends AppCompatActivity {
         SetAlarms();
             LogUtil.LogString("Call SetAlarms");
         }
+        //アラームが鳴っているかいないかでSurfaceをOn/Off
+        SetStatSurface();
     }
 
 
@@ -104,6 +131,13 @@ public class AlarmHome extends AppCompatActivity {
         }else {
             StartTimer();
         }
+    }
+
+    public void OnTouchSurfaceDuringAlarm(View view){
+        NotificationManager notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+        isAlarmRinging = false;
+        SetStatSurface();
     }
 
     private void StartTimer(){
@@ -276,12 +310,20 @@ public class AlarmHome extends AppCompatActivity {
                 isTommorow = true;
             }
         }
-        LogUtil.LogString("istommorow"+isTommorow);
+        LogUtil.LogString("istommorow" + isTommorow);
         return  isTommorow;
     }
 
-    public  void onPushStopButton(View view){
-       NotificationManager notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancelAll();
+    public void SetStatSurface(){
+        if(isAlarmRinging) {
+            LogUtil.LogString("surface visible");
+            surface.setVisibility(View.VISIBLE);
+        }else{
+            LogUtil.LogString("surface invisible");
+            surface.setVisibility(View.INVISIBLE);
+        }
     }
+
+
+
 }

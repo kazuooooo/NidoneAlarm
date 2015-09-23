@@ -51,7 +51,10 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 .build();
         notification.flags = Notification.FLAG_INSISTENT;
 
-
+        //homeのフラグをOn
+        AlarmHome.isAlarmRinging = true;
+        //
+        //((AlarmHome)context).SetStatSurface();
         // 古い通知を削除
         notificationManager.cancelAll();
         // 通知
