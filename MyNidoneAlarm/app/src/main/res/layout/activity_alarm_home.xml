@@ -31,11 +31,12 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start"
+        android:text="Cancel"
         android:id="@+id/TimerButton"
         android:onClick="OnPushTimerButton"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
 
     <AnalogClock
         android:layout_width="wrap_content"
@@ -59,9 +60,11 @@
         android:id="@+id/surfaceView"
         android:alpha="0"
         android:onClick="OnTouchSurfaceDuringAlarm"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_alignBottom="@+id/TimerButton"
+        android:layout_alignRight="@+id/imageButton"
+        android:layout_alignEnd="@+id/imageButton" />
 
 </RelativeLayout>

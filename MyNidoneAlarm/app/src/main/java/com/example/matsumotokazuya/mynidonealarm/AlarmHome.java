@@ -141,10 +141,11 @@ public class AlarmHome extends AppCompatActivity {
     }
 
     private void StartTimer(){
-        //ボタン自体の文字を変更
-        timerButton.setText("cancel");
+
         //テキスト部分入力不可処理
         timerSettingText.setVisibility(View.INVISIBLE);
+        //ボタン自体の文字を変更
+        timerButton.setVisibility(View.VISIBLE);
         //タイマーフラグをOn
         isTimerProcessing = true;
         //タイマーの値を取得
@@ -166,7 +167,7 @@ public class AlarmHome extends AppCompatActivity {
         //完了処理
         mainTimer.cancel();
         //ボタン自体の文字を変更
-        timerButton.setText("start");
+        timerButton.setVisibility(View.INVISIBLE);
         //テキスト部分入力不可処理
         timerSettingText.setVisibility(View.VISIBLE);
         //テキスト表示リセット
