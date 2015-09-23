@@ -11,11 +11,13 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TimePicker;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 
 public class Setting extends AppCompatActivity {
     private EditText timerSettingText;
     private SharedPreferences dataStore;
+    private SharedPreferences.Editor dataEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,7 @@ public class Setting extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         timerSettingText = (EditText)findViewById(R.id.SettingTime);
         dataStore = getSharedPreferences("DataStore",MODE_PRIVATE);
+        dataEditor = dataStore.edit();
     }
 
     @Override
@@ -50,27 +53,34 @@ public class Setting extends AppCompatActivity {
     public void onPause(){
     super.onPause();
     //アラームのOn/Off
-    SettingValues.isAlarmSet = ((Switch)findViewById(R.id.isAlarmActive)).isChecked();
+    boolean isAlarmSet = ((Switch)findViewById(R.id.isAlarmActive)).isChecked();
+    dataEditor.putBoolean("isAlarmSet", isAlarmSet);
     //Timerの設定値を保存
     Log.d("Destroy","onpause call");
-    SettingValues.alarmTimeHour = ((TimePicker)findViewById(R.id.timePicker)).getCurrentHour();
-    SettingValues.alarmTimeMinutes = ((TimePicker)findViewById(R.id.timePicker)).getCurrentMinute();
+    int alarmTimeHour = ((TimePicker)findViewById(R.id.timePicker)).getCurrentHour();
+    dataEditor.putInt("alarmTimeHour", alarmTimeHour);
+    int alarmTimeMinutes = ((TimePicker)findViewById(R.id.timePicker)).getCurrentMinute();
+    dataEditor.putInt("alarmTimeMinutes", alarmTimeMinutes);
 
     //曜日のチェック情報を保存
+    //HashMapのsaveはObjectOutputStreamに書き換えたい　http://stackoverflow.com/questions/7944601/saving-a-hash-map-into-shared-preferences
     SaveDOWChecks();
-    LogUtil.LogInt(SettingValues.alarmTimeHour);
-    LogUtil.LogInt(SettingValues.alarmTimeMinutes);
+    dataEditor.commit();
     }
 
     private void SaveDOWChecks(){
         HashMap<String,Boolean> maps = new HashMap<String,Boolean>();
-        maps.put("Mon",((CheckBox)findViewById(R.id.checkMonday)).isChecked());
+        maps.put("Mon", ((CheckBox) findViewById(R.id.checkMonday)).isChecked());
         maps.put("Tue",((CheckBox)findViewById(R.id.checkTuesday)).isChecked());
-        maps.put("Wed",((CheckBox)findViewById(R.id.checkWednesday)).isChecked());
+        maps.put("Wed", ((CheckBox) findViewById(R.id.checkWednesday)).isChecked());
         maps.put("Thu",((CheckBox)findViewById(R.id.checkThursday)).isChecked());
         maps.put("Fri",((CheckBox)findViewById(R.id.checkFriday)).isChecked());
-        maps.put("Sat",((CheckBox)findViewById(R.id.checkSaturday)).isChecked());
-        maps.put("Sun",((CheckBox)findViewById(R.id.checkSunday)).isChecked());
+        maps.put("Sat", ((CheckBox) findViewById(R.id.checkSaturday)).isChecked());
+        maps.put("Sun", ((CheckBox) findViewById(R.id.checkSunday)).isChecked());
         SettingValues.daycheckMap = maps;
     }
+
+//    private void SaveData(String key,){
+//
+//    }
 }

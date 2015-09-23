@@ -3,6 +3,7 @@ package com.example.matsumotokazuya.mynidonealarm;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,14 @@ public class AlarmHome extends AppCompatActivity {
     private SurfaceView surface;
     public static boolean isAlarmRinging;
 
+    //DataStore設定値
+    private SharedPreferences dataStore;
+    private boolean d_isAlarmSetting;
+    private int d_alarmHour;
+    private int d_alarmMinutes;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +68,9 @@ public class AlarmHome extends AppCompatActivity {
         //テスト
         mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
         mSoundId = mSoundPool.load(getApplicationContext(),R.raw.se_maoudamashii_chime14,0);
+        //dataStore
+        ReadDataStore();
+
 
         timerSettingText.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -85,8 +97,8 @@ public class AlarmHome extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
 
-        //初回起動じゃなければアラームを設定
-        if(SettingValues.isAlarmSet){
+        //初回起動じゃなければアラームを設
+        if(d_isAlarmSetting){
         SetAlarms();
             LogUtil.LogString("Call SetAlarms");
         }
@@ -213,7 +225,7 @@ public class AlarmHome extends AppCompatActivity {
     private void SetAlarms(){
 
         //設定時間と今の時間を比較してアラームが鳴るのが今日か明日かを決定
-        boolean isTommorow = GetTodayOrTommorowByTime(SettingValues.alarmTimeHour, SettingValues.alarmTimeMinutes);
+        boolean isTommorow = GetTodayOrTommorowByTime(d_alarmHour, d_alarmMinutes);
         //設定時間の曜日を取得
         String dayOfWeek = GetDayOfWeekByTime(isTommorow);
         //調べた曜日にアラームが設定されているか確認
@@ -222,8 +234,8 @@ public class AlarmHome extends AppCompatActivity {
             if(isTommorow){
                 cal.add(Calendar.DATE,1);
             }
-            cal.set(Calendar.HOUR_OF_DAY,SettingValues.alarmTimeHour);
-            cal.set(Calendar.MINUTE,SettingValues.alarmTimeMinutes);
+            cal.set(Calendar.HOUR_OF_DAY,d_alarmHour);
+            cal.set(Calendar.MINUTE,d_alarmMinutes);
             SetAlarmByDate(cal);
         }else{
             LogUtil.LogString(dayOfWeek+"day is not setting");
@@ -304,10 +316,10 @@ public class AlarmHome extends AppCompatActivity {
     private boolean GetTodayOrTommorowByTime(int hour,int minutes) {
         Calendar calendar = Calendar.getInstance();
         boolean isTommorow = false;
-        if (calendar.get(Calendar.HOUR_OF_DAY) > SettingValues.alarmTimeHour) {
+        if (calendar.get(Calendar.HOUR_OF_DAY) > d_alarmHour) {
             isTommorow = true;
-        } else if (calendar.get(Calendar.HOUR_OF_DAY) == SettingValues.alarmTimeHour) {
-            if (calendar.get(Calendar.MINUTE) > SettingValues.alarmTimeMinutes) {
+        } else if (calendar.get(Calendar.HOUR_OF_DAY) == d_alarmHour) {
+            if (calendar.get(Calendar.MINUTE) > d_alarmMinutes) {
                 isTommorow = true;
             }
         }
@@ -323,6 +335,14 @@ public class AlarmHome extends AppCompatActivity {
             LogUtil.LogString("surface invisible");
             surface.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void ReadDataStore(){
+        dataStore = getSharedPreferences("DataStore",MODE_PRIVATE);
+        d_isAlarmSetting = dataStore.getBoolean("isAlarmSet", false);
+        d_alarmHour = dataStore.getInt("alarmTimeHour", -1);
+        d_alarmMinutes = dataStore.getInt("alarmTimeMinutes",-1);
+
     }
 
 
