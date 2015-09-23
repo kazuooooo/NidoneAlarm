@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,13 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 import android.os.Handler;
 import java.util.Calendar;
-import java.util.logging.Logger;
 
 import android.app.PendingIntent;
 import android.app.AlarmManager;
@@ -32,12 +29,13 @@ public class AlarmHome extends AppCompatActivity {
     private MainTimerTask mainTimerTask;
     private TextView countText;
     private Button timerButton;
-    private String timerButtonText;
+    private boolean isTimerProcessing = false;
     private int minutes = 0;
     private int seconds = 0;
     private Handler mHandler = new Handler();
     public static SoundPool mSoundPool;
     public static int mSoundId;
+    private EditText timerSettingText;
 
 
     @Override
@@ -48,7 +46,9 @@ public class AlarmHome extends AppCompatActivity {
         //タイマーのテキストビューを取得
         countText = (TextView)findViewById(R.id.timer);
         //タイマーのボタン
-        timerButton =(Button)findViewById(R.id.TestButton);
+        timerButton =(Button)findViewById(R.id.TimerButton);
+        //タイマーの設定テキスト編集
+        timerSettingText = (EditText)findViewById(R.id.TimerSettingText);
         //テスト
         mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
         mSoundId = mSoundPool.load(getApplicationContext(),R.raw.se_maoudamashii_chime14,0);
@@ -98,20 +98,45 @@ public class AlarmHome extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void OnStartTimer(View view){
+    public void OnPushTimerButton(View view){
+        if(isTimerProcessing){
+            ResetTimer();
+        }else {
+            StartTimer();
+        }
+    }
+
+    private void StartTimer(){
+        //ボタン自体の文字を変更
+        timerButton.setText("cancel");
+        //テキスト部分入力不可処理
+        timerSettingText.setVisibility(View.INVISIBLE);
+        //タイマーフラグをOn
+        isTimerProcessing = true;
         //タイマーの値を取得
-        int timerSettingMinutes = Integer.parseInt(((EditText)findViewById(R.id.TimerSettingText)).getText().toString());
+        int timerSettingMinutes = Integer.parseInt((timerSettingText.getText().toString()));
         //内部的な時間にも設定
         minutes = timerSettingMinutes;
-        seconds = minutes*60;
+        seconds = minutes * 60;
         //タイマーインスタンスを作成
         this.mainTimer = new Timer();
         //タスククラスインスタンスを作成
         this.mainTimerTask = new MainTimerTask();
-
         //タイマースケジュールを設定
         this.mainTimer.schedule(mainTimerTask, 1000, 1000);
+    }
 
+    private void ResetTimer(){
+        //FlagOff
+        isTimerProcessing = false;
+        //完了処理
+        mainTimer.cancel();
+        //ボタン自体の文字を変更
+        timerButton.setText("start");
+        //テキスト部分入力不可処理
+        timerSettingText.setVisibility(View.VISIBLE);
+        //テキスト表示リセット
+        countText.setText("00:00");
     }
 
     public class MainTimerTask extends TimerTask {
@@ -138,9 +163,10 @@ public class AlarmHome extends AppCompatActivity {
                     countText.setText(minuteString + ":" + secondString);
                     if (seconds == 0) {
                         //即アラーム発生
-                        Calendar cal = Calendar.getInstance();
-                        SetAlarmByDate(cal);
-                        mainTimer.cancel();
+                        SetAlarmByDate(Calendar.getInstance());
+                        //タイマーリセット
+                        ResetTimer();
+
                     }
                 }
             });
