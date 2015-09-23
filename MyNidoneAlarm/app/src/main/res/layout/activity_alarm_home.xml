@@ -31,7 +31,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/timerbuttontext"
+        android:text="Start"
         android:id="@+id/TestButton"
         android:onClick="OnStartTimer"
         android:layout_alignParentBottom="true"
@@ -53,5 +53,14 @@
         android:layout_alignBottom="@+id/imageButton"
         android:layout_alignLeft="@+id/TestButton"
         android:layout_alignStart="@+id/TestButton" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/TimerSettingText"
+        android:layout_above="@+id/TestButton"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

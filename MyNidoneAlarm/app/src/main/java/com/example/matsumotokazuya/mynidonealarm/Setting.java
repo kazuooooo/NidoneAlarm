@@ -53,7 +53,6 @@ public class Setting extends AppCompatActivity {
     SettingValues.isAlarmSet = ((Switch)findViewById(R.id.isAlarmActive)).isChecked();
     //Timerの設定値を保存
     Log.d("Destroy","onpause call");
-    SettingValues.settingTime = Integer.parseInt(timerSettingText.getText().toString());
     SettingValues.alarmTimeHour = ((TimePicker)findViewById(R.id.timePicker)).getCurrentHour();
     SettingValues.alarmTimeMinutes = ((TimePicker)findViewById(R.id.timePicker)).getCurrentMinute();
 

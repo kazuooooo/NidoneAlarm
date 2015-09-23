@@ -59,12 +59,7 @@ public class AlarmHome extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        Log.d("my", "onresume");
-        //タイマーのボタンに反映
-        timerButton.setText((CharSequence) String.valueOf(SettingValues.settingTime));
-        //内部的な時間にも設定
-        minutes =SettingValues.settingTime;
-        seconds = minutes*60;
+
         //初回起動じゃなければアラームを設定
         if(SettingValues.isAlarmSet){
         SetAlarms();
@@ -104,7 +99,11 @@ public class AlarmHome extends AppCompatActivity {
     }
 
     public void OnStartTimer(View view){
-
+        //タイマーの値を取得
+        int timerSettingMinutes = Integer.parseInt(((EditText)findViewById(R.id.TimerSettingText)).getText().toString());
+        //内部的な時間にも設定
+        minutes = timerSettingMinutes;
+        seconds = minutes*60;
         //タイマーインスタンスを作成
         this.mainTimer = new Timer();
         //タスククラスインスタンスを作成
