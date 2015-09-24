@@ -68,8 +68,7 @@ public class AlarmHome extends AppCompatActivity {
         //テスト
         mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
         mSoundId = mSoundPool.load(getApplicationContext(),R.raw.se_maoudamashii_chime14,0);
-        //dataStore
-        ReadDataStore();
+
 
 
         timerSettingText.setOnKeyListener(new View.OnKeyListener() {
@@ -104,6 +103,8 @@ public class AlarmHome extends AppCompatActivity {
         }
         //アラームが鳴っているかいないかでSurfaceをOn/Off
         SetStatSurface();
+        //dataStore
+        ReadDataStore();
     }
 
 
@@ -338,11 +339,12 @@ public class AlarmHome extends AppCompatActivity {
     }
 
     private void ReadDataStore(){
-        dataStore = getSharedPreferences("DataStore",MODE_PRIVATE);
+        dataStore = getSharedPreferences("DataStore", MODE_PRIVATE);
         d_isAlarmSetting = dataStore.getBoolean("isAlarmSet", false);
+        LogUtil.LogString("loaddata"+d_isAlarmSetting);
         d_alarmHour = dataStore.getInt("alarmTimeHour", -1);
         d_alarmMinutes = dataStore.getInt("alarmTimeMinutes",-1);
-
+        LogUtil.LogString("loaddata"+d_alarmHour+":"+d_alarmMinutes);
     }
 
 

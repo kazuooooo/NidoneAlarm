@@ -18,14 +18,26 @@ public class Setting extends AppCompatActivity {
     private EditText timerSettingText;
     private SharedPreferences dataStore;
     private SharedPreferences.Editor dataEditor;
+    private Switch isAlarmSettingSwitch;
+    private TimePicker settingTimePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         timerSettingText = (EditText)findViewById(R.id.SettingTime);
+        isAlarmSettingSwitch = (Switch)findViewById(R.id.isAlarmActive);
+        settingTimePicker = (TimePicker)findViewById(R.id.timePicker);
         dataStore = getSharedPreferences("DataStore",MODE_PRIVATE);
         dataEditor = dataStore.edit();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        //設定してある値をUIに反映
+        RefrectSettingData();
+
     }
 
     @Override
@@ -53,13 +65,13 @@ public class Setting extends AppCompatActivity {
     public void onPause(){
     super.onPause();
     //アラームのOn/Off
-    boolean isAlarmSet = ((Switch)findViewById(R.id.isAlarmActive)).isChecked();
+    boolean isAlarmSet = isAlarmSettingSwitch.isChecked();
     dataEditor.putBoolean("isAlarmSet", isAlarmSet);
     //Timerの設定値を保存
-    Log.d("Destroy","onpause call");
-    int alarmTimeHour = ((TimePicker)findViewById(R.id.timePicker)).getCurrentHour();
+    Log.d("Destroy", "onpause call");
+    int alarmTimeHour = settingTimePicker.getCurrentHour();
     dataEditor.putInt("alarmTimeHour", alarmTimeHour);
-    int alarmTimeMinutes = ((TimePicker)findViewById(R.id.timePicker)).getCurrentMinute();
+    int alarmTimeMinutes = settingTimePicker.getCurrentMinute();
     dataEditor.putInt("alarmTimeMinutes", alarmTimeMinutes);
 
     //曜日のチェック情報を保存
@@ -80,7 +92,14 @@ public class Setting extends AppCompatActivity {
         SettingValues.daycheckMap = maps;
     }
 
-//    private void SaveData(String key,){
-//
-//    }
+
+    private void RefrectSettingData(){
+        boolean d_isAlarmSetting = dataStore.getBoolean("isAlarmSet", false);
+        isAlarmSettingSwitch.setChecked(d_isAlarmSetting);
+        int d_alarmHour = dataStore.getInt("alarmTimeHour", 0);
+        int d_alarmMinutes = dataStore.getInt("alarmTimeMinutes",0);
+        settingTimePicker.setCurrentHour(d_alarmHour);
+        settingTimePicker.setCurrentMinute(d_alarmMinutes);
+
+    }
 }
