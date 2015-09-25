@@ -11,7 +11,11 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TimePicker;
 
-import java.lang.reflect.Type;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 public class Setting extends AppCompatActivity {
@@ -20,6 +24,8 @@ public class Setting extends AppCompatActivity {
     private SharedPreferences.Editor dataEditor;
     private Switch isAlarmSettingSwitch;
     private TimePicker settingTimePicker;
+    private HashMap<String,Boolean> DOWMap;
+    private HashMap<String,CheckBox> DOWCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +34,19 @@ public class Setting extends AppCompatActivity {
         timerSettingText = (EditText)findViewById(R.id.SettingTime);
         isAlarmSettingSwitch = (Switch)findViewById(R.id.isAlarmActive);
         settingTimePicker = (TimePicker)findViewById(R.id.timePicker);
-        dataStore = getSharedPreferences("DataStore",MODE_PRIVATE);
+        dataStore = getSharedPreferences("DataStore", MODE_PRIVATE);
         dataEditor = dataStore.edit();
+        //曜日checkboxを配列で取得
+        DOWCheckBox = new HashMap<String,CheckBox>();
+        DOWCheckBox.put("Mon",(CheckBox) findViewById(R.id.checkMon));
+        DOWCheckBox.put("Tue",(CheckBox) findViewById(R.id.checkTue));
+        DOWCheckBox.put("Wed",(CheckBox) findViewById(R.id.checkWed));
+        DOWCheckBox.put("Thu",(CheckBox) findViewById(R.id.checkThu));
+        DOWCheckBox.put("Fri",(CheckBox) findViewById(R.id.checkFri));
+        DOWCheckBox.put("Sat",(CheckBox) findViewById(R.id.checkSat));
+        DOWCheckBox.put("Sun",(CheckBox) findViewById(R.id.checkSat));
+
+
     }
 
     @Override
@@ -82,24 +99,64 @@ public class Setting extends AppCompatActivity {
 
     private void SaveDOWChecks(){
         HashMap<String,Boolean> maps = new HashMap<String,Boolean>();
-        maps.put("Mon", ((CheckBox) findViewById(R.id.checkMonday)).isChecked());
-        maps.put("Tue",((CheckBox)findViewById(R.id.checkTuesday)).isChecked());
-        maps.put("Wed", ((CheckBox) findViewById(R.id.checkWednesday)).isChecked());
-        maps.put("Thu",((CheckBox)findViewById(R.id.checkThursday)).isChecked());
-        maps.put("Fri",((CheckBox)findViewById(R.id.checkFriday)).isChecked());
-        maps.put("Sat", ((CheckBox) findViewById(R.id.checkSaturday)).isChecked());
-        maps.put("Sun", ((CheckBox) findViewById(R.id.checkSunday)).isChecked());
-        SettingValues.daycheckMap = maps;
+        maps.put("Mon", DOWCheckBox.get("Mon").isChecked());
+        maps.put("Tue", DOWCheckBox.get("Tue").isChecked());
+        maps.put("Wed", DOWCheckBox.get("Wed").isChecked());
+        maps.put("Thu", DOWCheckBox.get("Thu").isChecked());
+        maps.put("Fri", DOWCheckBox.get("Fri").isChecked());
+        maps.put("Sat", DOWCheckBox.get("Sat").isChecked());
+        maps.put("Sun", DOWCheckBox.get("Sun").isChecked());
+
+        File file = new File(getDir("data", MODE_PRIVATE), "map");
+        try {
+            LogUtil.LogString("try");
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file));
+            outputStream.writeObject(maps);
+            outputStream.flush();
+            outputStream.close();
+            //試し読み Hashmap型で読めている
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+            //Castできない?? 読み込みから
+
+
+
+        }catch (Exception ex){
+            LogUtil.LogString("catch" + ex.toString());
+        }
     }
 
 
     private void RefrectSettingData(){
+        //設定値を読み込み
         boolean d_isAlarmSetting = dataStore.getBoolean("isAlarmSet", false);
-        isAlarmSettingSwitch.setChecked(d_isAlarmSetting);
         int d_alarmHour = dataStore.getInt("alarmTimeHour", 0);
-        int d_alarmMinutes = dataStore.getInt("alarmTimeMinutes",0);
+        int d_alarmMinutes = dataStore.getInt("alarmTimeMinutes", 0);
+
+        //画面に反映
+        isAlarmSettingSwitch.setChecked(d_isAlarmSetting);
         settingTimePicker.setCurrentHour(d_alarmHour);
         settingTimePicker.setCurrentMinute(d_alarmMinutes);
 
+        //曜日部分
+        try {
+            File file = new File(getDir("data", MODE_PRIVATE), "map");
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+            DOWMap = (HashMap)ois.readObject();
+            CheckBoxReflect("Mon");
+            CheckBoxReflect("Tue");
+            CheckBoxReflect("Wed");
+            CheckBoxReflect("Thu");
+            CheckBoxReflect("Fri");
+            CheckBoxReflect("Sat");
+            CheckBoxReflect("Sun");
+        }catch (Exception e){
+
+        }
+
+    }
+
+    private void CheckBoxReflect(String dow){
+        boolean isCheck = DOWMap.get(dow);
+        DOWCheckBox.get(dow).setChecked(isCheck);
     }
 }

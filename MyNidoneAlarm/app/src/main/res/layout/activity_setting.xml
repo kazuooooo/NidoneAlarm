@@ -46,7 +46,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkMonday"
+            android:id="@+id/checkMon"
             android:checked="true"
             android:layout_above="@+id/SettingTime"
             android:layout_alignParentLeft="true"
@@ -56,16 +56,16 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkTuesday"
+            android:id="@+id/checkTue"
             android:checked="false"
-            android:layout_alignTop="@+id/checkMonday"
+            android:layout_alignTop="@+id/checkMon"
             android:layout_toLeftOf="@+id/SettingTime"
             android:layout_toStartOf="@+id/SettingTime" />
 
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkWednesday"
+            android:id="@+id/checkWed"
             android:checked="false"
             android:layout_above="@+id/SettingTime"
             android:layout_alignParentLeft="true"
@@ -75,7 +75,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkThursday"
+            android:id="@+id/checkThu"
             android:checked="false"
             android:layout_above="@+id/SettingTime"
             android:layout_alignParentLeft="true"
@@ -85,7 +85,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkFriday"
+            android:id="@+id/checkFri"
             android:checked="false"
             android:layout_above="@+id/SettingTime"
             android:layout_alignParentLeft="true"
@@ -95,7 +95,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkSaturday"
+            android:id="@+id/checkSat"
             android:checked="false"
             android:layout_above="@+id/SettingTime"
             android:layout_alignParentLeft="true"
@@ -110,7 +110,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkSunday"
+            android:id="@+id/checkSun"
             android:checked="false"
             android:layout_above="@+id/SettingTime"
             android:layout_alignParentLeft="true"

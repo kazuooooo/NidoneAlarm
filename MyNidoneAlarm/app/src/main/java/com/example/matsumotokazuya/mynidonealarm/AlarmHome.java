@@ -18,6 +18,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import android.os.Handler;
@@ -48,6 +56,7 @@ public class AlarmHome extends AppCompatActivity {
     private boolean d_isAlarmSetting;
     private int d_alarmHour;
     private int d_alarmMinutes;
+    private HashMap<String,Boolean> DOWMap;
 
 
 
@@ -230,7 +239,7 @@ public class AlarmHome extends AppCompatActivity {
         //設定時間の曜日を取得
         String dayOfWeek = GetDayOfWeekByTime(isTommorow);
         //調べた曜日にアラームが設定されているか確認
-        if(SettingValues.daycheckMap.get(dayOfWeek)){
+        if(DOWMap.get(dayOfWeek)){
             Calendar cal = Calendar.getInstance();
             if(isTommorow){
                 cal.add(Calendar.DATE,1);
@@ -345,6 +354,15 @@ public class AlarmHome extends AppCompatActivity {
         d_alarmHour = dataStore.getInt("alarmTimeHour", -1);
         d_alarmMinutes = dataStore.getInt("alarmTimeMinutes",-1);
         LogUtil.LogString("loaddata"+d_alarmHour+":"+d_alarmMinutes);
+        //map情報を読み込み
+        try {
+            File file = new File(getDir("data", MODE_PRIVATE), "map");
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+            DOWMap = (HashMap)ois.readObject();
+            LogUtil.LogString(DOWMap.toString());
+        }catch (Exception e){
+
+        }
     }
 
 
