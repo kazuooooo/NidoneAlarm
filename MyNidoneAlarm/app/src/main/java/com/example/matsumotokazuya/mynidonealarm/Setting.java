@@ -26,6 +26,7 @@ public class Setting extends AppCompatActivity {
     private TimePicker settingTimePicker;
     private HashMap<String,Boolean> DOWMap;
     private HashMap<String,CheckBox> DOWCheckBox;
+    private String[] woddays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +46,7 @@ public class Setting extends AppCompatActivity {
         DOWCheckBox.put("Fri",(CheckBox) findViewById(R.id.checkFri));
         DOWCheckBox.put("Sat",(CheckBox) findViewById(R.id.checkSat));
         DOWCheckBox.put("Sun",(CheckBox) findViewById(R.id.checkSat));
-
-
+        woddays = new String[]{"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
     }
 
     @Override
@@ -99,13 +99,17 @@ public class Setting extends AppCompatActivity {
 
     private void SaveDOWChecks(){
         HashMap<String,Boolean> maps = new HashMap<String,Boolean>();
-        maps.put("Mon", DOWCheckBox.get("Mon").isChecked());
-        maps.put("Tue", DOWCheckBox.get("Tue").isChecked());
-        maps.put("Wed", DOWCheckBox.get("Wed").isChecked());
-        maps.put("Thu", DOWCheckBox.get("Thu").isChecked());
-        maps.put("Fri", DOWCheckBox.get("Fri").isChecked());
-        maps.put("Sat", DOWCheckBox.get("Sat").isChecked());
-        maps.put("Sun", DOWCheckBox.get("Sun").isChecked());
+        for (String dow:woddays
+             ) {
+            maps.put(dow, DOWCheckBox.get(dow).isChecked());
+        }
+//        maps.put("Mon", DOWCheckBox.get("Mon").isChecked());
+//        maps.put("Tue", DOWCheckBox.get("Tue").isChecked());
+//        maps.put("Wed", DOWCheckBox.get("Wed").isChecked());
+//        maps.put("Thu", DOWCheckBox.get("Thu").isChecked());
+//        maps.put("Fri", DOWCheckBox.get("Fri").isChecked());
+//        maps.put("Sat", DOWCheckBox.get("Sat").isChecked());
+//        maps.put("Sun", DOWCheckBox.get("Sun").isChecked());
 
         File file = new File(getDir("data", MODE_PRIVATE), "map");
         try {
@@ -142,13 +146,17 @@ public class Setting extends AppCompatActivity {
             File file = new File(getDir("data", MODE_PRIVATE), "map");
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
             DOWMap = (HashMap)ois.readObject();
-            CheckBoxReflect("Mon");
-            CheckBoxReflect("Tue");
-            CheckBoxReflect("Wed");
-            CheckBoxReflect("Thu");
-            CheckBoxReflect("Fri");
-            CheckBoxReflect("Sat");
-            CheckBoxReflect("Sun");
+            for (String dow:woddays
+                 ) {
+                CheckBoxReflect(dow);
+            }
+//            CheckBoxReflect("Mon");
+//            CheckBoxReflect("Tue");
+//            CheckBoxReflect("Wed");
+//            CheckBoxReflect("Thu");
+//            CheckBoxReflect("Fri");
+//            CheckBoxReflect("Sat");
+//            CheckBoxReflect("Sun");
         }catch (Exception e){
 
         }
