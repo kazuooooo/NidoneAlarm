@@ -10,11 +10,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageButton"
+        android:background="@drawable/ic_setting_light"
+        android:onClick="OnSetting"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/ic_setting_light"
-        android:onClick="OnSetting" />
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/analogClock"
-        android:dial="@drawable/ic_setting_light"
+        android:dial="@drawable/nidonekunhalf"
         android:layout_below="@+id/imageButton"
         android:layout_centerHorizontal="true" />
 
@@ -52,14 +52,7 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/TimerSettingText"
-        android:layout_above="@+id/TimerButton"
+        android:layout_below="@+id/analogClock"
         android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="StopAlarm"
-        android:id="@+id/button"
-        android:onClick="OnTouchSurfaceDuringAlarm" />
 
 </RelativeLayout>
