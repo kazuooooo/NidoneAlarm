@@ -164,10 +164,25 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
     }
 
     private void ChangeSettingState(boolean canSet){
+            //入力可否
             settingTimePicker.setEnabled(canSet);
             settingTimePickerChild.setEnabled(canSet);
             for (String dow:woddays) {
                 DOWCheckBox.get(dow).setEnabled(canSet);
             }
+            //Alpha変更
+        if(canSet) {
+            settingTimePicker.setAlpha(1);
+            settingTimePickerChild.setAlpha(1);
+            for (String dow:woddays) {
+                DOWCheckBox.get(dow).setAlpha(1);
+            }
+        }else{
+            settingTimePicker.setAlpha(0.5f);
+            settingTimePickerChild.setAlpha(0.5f);
+            for (String dow:woddays) {
+                DOWCheckBox.get(dow).setAlpha(0.5f);
+            }
+        }
     }
 }
