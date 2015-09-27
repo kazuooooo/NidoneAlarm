@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.service.notification.StatusBarNotification;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -46,7 +48,8 @@ public class AlarmHome extends AppCompatActivity {
     public static int mSoundId;
     private EditText timerSettingText;
     private SurfaceView surface;
-    public static boolean isAlarmRinging;
+    public static int alarmID;
+
 
     //DataStore設定値
     private SharedPreferences dataStore;
@@ -55,6 +58,8 @@ public class AlarmHome extends AppCompatActivity {
     private int d_alarmMinutes;
     private HashMap<String,Boolean> DOWMap;
 
+    //NotificationManager
+    private NotificationManager notificationManager;
 
 
 
@@ -69,11 +74,11 @@ public class AlarmHome extends AppCompatActivity {
         timerButton =(Button)findViewById(R.id.TimerButton);
         //タイマーの設定テキスト編集
         timerSettingText = (EditText)findViewById(R.id.TimerSettingText);
-        //Surface
-        surface = (SurfaceView)findViewById(R.id.surfaceView);
         //テスト
         mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
         mSoundId = mSoundPool.load(getApplicationContext(),R.raw.se_maoudamashii_chime14,0);
+
+        notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
 
 
@@ -101,8 +106,7 @@ public class AlarmHome extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        //アラームが鳴っているかいないかでSurfaceをOn/Off
-        SetStatSurface();
+
         //dataStore
         ReadDataStore();
         //初回起動じゃなければアラームを設
@@ -151,11 +155,11 @@ public class AlarmHome extends AppCompatActivity {
         }
     }
 
-    public void OnTouchSurfaceDuringAlarm(View view){
+
+    public void StopAlarm(){
+        LogUtil.LogString("Stop Alarm");
         NotificationManager notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
-        isAlarmRinging = false;
-        SetStatSurface();
     }
 
     private void StartTimer(){
@@ -314,23 +318,13 @@ public class AlarmHome extends AppCompatActivity {
         return  isTommorow;
     }
 
-    public void SetStatSurface(){
-        if(isAlarmRinging) {
-            LogUtil.LogString("surface visible");
-            surface.setVisibility(View.VISIBLE);
-        }else{
-            LogUtil.LogString("surface invisible");
-            surface.setVisibility(View.INVISIBLE);
-        }
-    }
-
     private void ReadDataStore(){
         dataStore = getSharedPreferences("DataStore", MODE_PRIVATE);
         d_isAlarmSetting = dataStore.getBoolean("isAlarmSet", false);
         LogUtil.LogString("loaddata"+d_isAlarmSetting);
         d_alarmHour = dataStore.getInt("alarmTimeHour", -1);
         d_alarmMinutes = dataStore.getInt("alarmTimeMinutes",-1);
-        LogUtil.LogString("loaddata"+d_alarmHour+":"+d_alarmMinutes);
+        LogUtil.LogString("loaddata" + d_alarmHour + ":" + d_alarmMinutes);
         //map情報を読み込み
         try {
             File file = new File(getDir("data", MODE_PRIVATE), "map");
@@ -342,6 +336,18 @@ public class AlarmHome extends AppCompatActivity {
         }
     }
 
-
-
+    //アラームが鳴っているときはタップでアラームを止める
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        LogUtil.LogString("gettouch");
+        //TODO:まとめ
+        //Notificationmanagerを使って今アクティブなActivitiを取得
+        StatusBarNotification[] nots = notificationManager.getActiveNotifications();
+        //今回はアラームしか使ってないので何かあれば停止
+        for(StatusBarNotification not:nots){
+            LogUtil.LogString("stopalarm");
+            StopAlarm();
+        }
+        return super.onTouchEvent(event);
+    }
 }

@@ -6,9 +6,11 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.net.URI;
@@ -23,6 +25,8 @@ import android.net.Uri;
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
     public static  NotificationManager notificationManager;
+    private SharedPreferences dataStore;
+    private SharedPreferences.Editor dataEditor;
     @Override
     public void onReceive(Context context,Intent intent){
         LogUtil.LogString("CallNotify");
@@ -49,8 +53,6 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 .build();
         notification.flags = Notification.FLAG_INSISTENT;
 
-        //homeのフラグをOn
-        AlarmHome.isAlarmRinging = true;
         //
         //((AlarmHome)context).SetStatSurface();
         // 古い通知を削除
@@ -58,5 +60,4 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         // 通知
         notificationManager.notify(R.string.app_name, notification);
     }
-
 }

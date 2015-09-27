@@ -42,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/analogClock"
+        android:dial="@drawable/ic_setting_light"
         android:layout_below="@+id/imageButton"
         android:layout_centerHorizontal="true" />
 
@@ -53,19 +54,6 @@
         android:id="@+id/TimerSettingText"
         android:layout_above="@+id/TimerButton"
         android:layout_centerHorizontal="true" />
-
-    <SurfaceView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/surfaceView"
-        android:alpha="0"
-        android:onClick="OnTouchSurfaceDuringAlarm"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:visibility="invisible"
-        android:layout_alignBottom="@+id/TimerButton"
-        android:layout_alignRight="@+id/imageButton"
-        android:layout_alignEnd="@+id/imageButton" />
 
     <Button
         android:layout_width="wrap_content"
