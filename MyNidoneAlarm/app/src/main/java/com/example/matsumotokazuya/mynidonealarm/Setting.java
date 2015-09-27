@@ -80,21 +80,25 @@ public class Setting extends AppCompatActivity {
     }
 @Override
     public void onPause(){
-    super.onPause();
-    //アラームのOn/Off
-    boolean isAlarmSet = isAlarmSettingSwitch.isChecked();
-    dataEditor.putBoolean("isAlarmSet", isAlarmSet);
-    //Timerの設定値を保存
-    Log.d("Destroy", "onpause call");
-    int alarmTimeHour = settingTimePicker.getCurrentHour();
-    dataEditor.putInt("alarmTimeHour", alarmTimeHour);
-    int alarmTimeMinutes = settingTimePicker.getCurrentMinute();
-    dataEditor.putInt("alarmTimeMinutes", alarmTimeMinutes);
+        super.onPause();
+        SaveSettingData();
+    }
 
-    //曜日のチェック情報を保存
-    //HashMapのsaveはObjectOutputStreamに書き換えたい　http://stackoverflow.com/questions/7944601/saving-a-hash-map-into-shared-preferences
-    SaveDOWChecks();
-    dataEditor.commit();
+    private void SaveSettingData(){
+        //アラームのOn/Off
+        boolean isAlarmSet = isAlarmSettingSwitch.isChecked();
+        dataEditor.putBoolean("isAlarmSet", isAlarmSet);
+        //Timerの設定値を保存
+        Log.d("Destroy", "onpause call");
+        int alarmTimeHour = settingTimePicker.getCurrentHour();
+        dataEditor.putInt("alarmTimeHour", alarmTimeHour);
+        int alarmTimeMinutes = settingTimePicker.getCurrentMinute();
+        dataEditor.putInt("alarmTimeMinutes", alarmTimeMinutes);
+
+        //曜日のチェック情報を保存
+        //HashMapのsaveはObjectOutputStreamに書き換えたい　http://stackoverflow.com/questions/7944601/saving-a-hash-map-into-shared-preferences
+        SaveDOWChecks();
+        dataEditor.commit();
     }
 
     private void SaveDOWChecks(){
@@ -102,14 +106,7 @@ public class Setting extends AppCompatActivity {
         for (String dow:woddays) {
             maps.put(dow, DOWCheckBox.get(dow).isChecked());
         }
-//        maps.put("Mon", DOWCheckBox.get("Mon").isChecked());
-//        maps.put("Tue", DOWCheckBox.get("Tue").isChecked());
-//        maps.put("Wed", DOWCheckBox.get("Wed").isChecked());
-//        maps.put("Thu", DOWCheckBox.get("Thu").isChecked());
-//        maps.put("Fri", DOWCheckBox.get("Fri").isChecked());
-//        maps.put("Sat", DOWCheckBox.get("Sat").isChecked());
-//        maps.put("Sun", DOWCheckBox.get("Sun").isChecked());
-
+        //ファイルにhasmapの情報を書き出し
         File file = new File(getDir("data", MODE_PRIVATE), "map");
         try {
             LogUtil.LogString("try");
@@ -117,12 +114,6 @@ public class Setting extends AppCompatActivity {
             outputStream.writeObject(maps);
             outputStream.flush();
             outputStream.close();
-            //試し読み Hashmap型で読めている
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-            //Castできない?? 読み込みから
-
-
-
         }catch (Exception ex){
             LogUtil.LogString("catch" + ex.toString());
         }
@@ -148,22 +139,13 @@ public class Setting extends AppCompatActivity {
             for (String dow:woddays) {
                 CheckBoxReflect(dow);
             }
-//            CheckBoxReflect("Mon");
-//            CheckBoxReflect("Tue");
-//            CheckBoxReflect("Wed");
-//            CheckBoxReflect("Thu");
-//            CheckBoxReflect("Fri");
-//            CheckBoxReflect("Sat");
-//            CheckBoxReflect("Sun");
         }catch (Exception e){
-
+            LogUtil.LogString("catch" + e.toString());
         }
-
     }
 
     private void CheckBoxReflect(String dow){
         boolean isCheck = DOWMap.get(dow);
-        LogUtil.LogString(dow+"reflect"+isCheck);
         DOWCheckBox.get(dow).setChecked(isCheck);
     }
 }

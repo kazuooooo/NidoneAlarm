@@ -25,9 +25,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     public static  NotificationManager notificationManager;
     @Override
     public void onReceive(Context context,Intent intent){
-        //効かない多分onReceive内でできることが限られている
-        //LogUtil.LogString("playAlarm!!!")
-// intentID (requestCode) を取り出す
+        LogUtil.LogString("CallNotify");
         int bid = intent.getIntExtra("intentId",0);
         // RecieverからMainActivityを起動させる
         Intent intent2 = new Intent(context, AlarmHome.class);
