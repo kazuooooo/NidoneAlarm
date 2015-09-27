@@ -124,6 +124,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/timePicker"
         android:focusableInTouchMode="true"
+        android:longClickable="true"
         android:layout_below="@+id/isAlarmActive"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />

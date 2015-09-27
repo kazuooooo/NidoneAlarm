@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TimePicker;
@@ -18,7 +19,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
-public class Setting extends AppCompatActivity {
+public class Setting extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
     private EditText timerSettingText;
     private SharedPreferences dataStore;
     private SharedPreferences.Editor dataEditor;
@@ -34,6 +35,9 @@ public class Setting extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         timerSettingText = (EditText)findViewById(R.id.SettingTime);
         isAlarmSettingSwitch = (Switch)findViewById(R.id.isAlarmActive);
+        //リスナー設定
+        LogUtil.LogString("setonchangedlistenaer");
+        isAlarmSettingSwitch.setOnCheckedChangeListener(this);
         settingTimePicker = (TimePicker)findViewById(R.id.timePicker);
         dataStore = getSharedPreferences("DataStore", MODE_PRIVATE);
         dataEditor = dataStore.edit();
@@ -147,5 +151,18 @@ public class Setting extends AppCompatActivity {
     private void CheckBoxReflect(String dow){
         boolean isCheck = DOWMap.get(dow);
         DOWCheckBox.get(dow).setChecked(isCheck);
+    }
+
+    //アラーム設定が変更されたときにその他の設定項目のOn/Offを切り替え
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        ChangeSettingState(isChecked);
+    }
+
+    private void ChangeSettingState(boolean canSet){
+            settingTimePicker.setEnabled(canSet);
+            for (String dow:woddays) {
+                DOWCheckBox.get(dow).setEnabled(canSet);
+            }
     }
 }
