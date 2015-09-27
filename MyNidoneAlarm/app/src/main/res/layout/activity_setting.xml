@@ -30,7 +30,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/timePicker"
+        android:layout_below="@+id/timePickerChild"
         android:layout_alignBottom="@+id/linearLayout"></LinearLayout>
 
     <LinearLayout
@@ -41,7 +41,7 @@
         android:gravity="center_horizontal|bottom"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/timePicker">
+        android:layout_below="@+id/timePickerChild">
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
             android:layout_above="@+id/SettingTime"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/timePicker" />
+            android:layout_below="@+id/timePickerChild" />
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
             android:layout_above="@+id/SettingTime"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/timePicker" />
+            android:layout_below="@+id/timePickerChild" />
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
             android:layout_above="@+id/SettingTime"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/timePicker" />
+            android:layout_below="@+id/timePickerChild" />
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -90,7 +90,7 @@
             android:layout_above="@+id/SettingTime"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/timePicker" />
+            android:layout_below="@+id/timePickerChild" />
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -100,7 +100,7 @@
             android:layout_above="@+id/SettingTime"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/timePicker" />
+            android:layout_below="@+id/timePickerChild" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -115,14 +115,14 @@
             android:layout_above="@+id/SettingTime"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/timePicker" />
+            android:layout_below="@+id/timePickerChild" />
 
     </LinearLayout>
 
     <TimePicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/timePicker"
+        android:id="@+id/timePickerChild"
         android:focusableInTouchMode="true"
         android:longClickable="true"
         android:layout_below="@+id/isAlarmActive"

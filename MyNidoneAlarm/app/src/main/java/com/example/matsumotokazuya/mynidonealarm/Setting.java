@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.Time;
 import java.util.HashMap;
 
 public class Setting extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
@@ -25,6 +26,7 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
     private SharedPreferences.Editor dataEditor;
     private Switch isAlarmSettingSwitch;
     private TimePicker settingTimePicker;
+    private TimePicker settingTimePickerChild;
     private HashMap<String,Boolean> DOWMap;
     private HashMap<String,CheckBox> DOWCheckBox;
     private String[] woddays;
@@ -38,7 +40,9 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
         //リスナー設定
         LogUtil.LogString("setonchangedlistenaer");
         isAlarmSettingSwitch.setOnCheckedChangeListener(this);
-        settingTimePicker = (TimePicker)findViewById(R.id.timePicker);
+        settingTimePicker = (TimePicker)findViewById(R.id.timePickerChild);
+        settingTimePickerChild = (TimePicker)findViewById(R.id.timePickerChild);
+
         dataStore = getSharedPreferences("DataStore", MODE_PRIVATE);
         dataEditor = dataStore.edit();
         //曜日checkboxを配列で取得
@@ -161,6 +165,7 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
 
     private void ChangeSettingState(boolean canSet){
             settingTimePicker.setEnabled(canSet);
+            settingTimePickerChild.setEnabled(canSet);
             for (String dow:woddays) {
                 DOWCheckBox.get(dow).setEnabled(canSet);
             }
