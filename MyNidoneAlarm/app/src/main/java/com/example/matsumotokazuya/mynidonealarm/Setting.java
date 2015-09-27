@@ -45,7 +45,7 @@ public class Setting extends AppCompatActivity {
         DOWCheckBox.put("Thu",(CheckBox) findViewById(R.id.checkThu));
         DOWCheckBox.put("Fri",(CheckBox) findViewById(R.id.checkFri));
         DOWCheckBox.put("Sat",(CheckBox) findViewById(R.id.checkSat));
-        DOWCheckBox.put("Sun",(CheckBox) findViewById(R.id.checkSat));
+        DOWCheckBox.put("Sun",(CheckBox) findViewById(R.id.checkSun));
         woddays = new String[]{"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
     }
 
@@ -99,8 +99,7 @@ public class Setting extends AppCompatActivity {
 
     private void SaveDOWChecks(){
         HashMap<String,Boolean> maps = new HashMap<String,Boolean>();
-        for (String dow:woddays
-             ) {
+        for (String dow:woddays) {
             maps.put(dow, DOWCheckBox.get(dow).isChecked());
         }
 //        maps.put("Mon", DOWCheckBox.get("Mon").isChecked());
@@ -146,8 +145,7 @@ public class Setting extends AppCompatActivity {
             File file = new File(getDir("data", MODE_PRIVATE), "map");
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
             DOWMap = (HashMap)ois.readObject();
-            for (String dow:woddays
-                 ) {
+            for (String dow:woddays) {
                 CheckBoxReflect(dow);
             }
 //            CheckBoxReflect("Mon");
@@ -165,6 +163,7 @@ public class Setting extends AppCompatActivity {
 
     private void CheckBoxReflect(String dow){
         boolean isCheck = DOWMap.get(dow);
+        LogUtil.LogString(dow+"reflect"+isCheck);
         DOWCheckBox.get(dow).setChecked(isCheck);
     }
 }
