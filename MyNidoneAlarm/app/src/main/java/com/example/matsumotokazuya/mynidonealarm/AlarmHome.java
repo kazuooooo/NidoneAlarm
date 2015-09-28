@@ -230,6 +230,7 @@ public class AlarmHome extends AppCompatActivity {
 
     private void SetAlarms(){
 
+        LogUtil.LogString("d_hour"+d_alarmHour+"d_minutes"+d_alarmMinutes);
         //設定時間と今の時間を比較してアラームが鳴るのが今日か明日かを決定
         boolean isTommorow = GetTodayOrTommorowByTime(d_alarmHour, d_alarmMinutes);
         //設定時間の曜日を取得
@@ -240,13 +241,18 @@ public class AlarmHome extends AppCompatActivity {
             if(isTommorow){
                 cal.add(Calendar.DATE,1);
             }
-            cal.set(Calendar.HOUR_OF_DAY,d_alarmHour);
-            cal.set(Calendar.MINUTE,d_alarmMinutes);
-            SetAlarmByDate(cal);
+
+            for(int d = 0;d<=6;d++) {
+                cal.set(Calendar.HOUR_OF_DAY, d_alarmHour);
+                cal.set(Calendar.MINUTE, d_alarmMinutes);
+                SetAlarmByDate(cal);
+                cal.add(Calendar.DAY_OF_YEAR,1);
+            }
         }else{
             LogUtil.LogString(dayOfWeek+"day is not setting");
         }
     }
+
 
 
     private void SetAlarmByDate(Calendar settingCal){
@@ -261,7 +267,6 @@ public class AlarmHome extends AppCompatActivity {
         //アラームをセットする
         AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
         am.set(AlarmManager.RTC, calendar.getTimeInMillis(), pending);
-        LogUtil.LogString(("current time" + CalendarUtil.GetCalendarInfo(Calendar.getInstance())));
         LogUtil.LogString("set alarm" + CalendarUtil.GetCalendarInfo(calendar));
         Toast.makeText(getApplicationContext(),"SetAlarm",Toast.LENGTH_LONG).show();
     }
