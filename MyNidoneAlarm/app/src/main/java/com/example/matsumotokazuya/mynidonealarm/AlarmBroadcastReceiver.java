@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.PowerManager;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -53,6 +54,15 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 .build();
         notification.flags = Notification.FLAG_INSISTENT;
 
+        //画面をon
+        //参考　http://techbooster.jpn.org/andriod/application/4429/
+
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wakelock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK
+                | PowerManager.ACQUIRE_CAUSES_WAKEUP
+                | PowerManager.ON_AFTER_RELEASE, "Your App Tag");
+        wakelock.acquire();
+        wakelock.release();
 
         //
         //((AlarmHome)context).SetStatSurface();

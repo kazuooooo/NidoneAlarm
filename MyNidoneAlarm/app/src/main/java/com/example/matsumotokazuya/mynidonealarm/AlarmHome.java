@@ -243,12 +243,9 @@ public class AlarmHome extends AppCompatActivity {
                 cal.add(Calendar.DATE,1);
             }
 
-            for(int d = 0;d<=6;d++) {
-                cal.set(Calendar.HOUR_OF_DAY, d_alarmHour);
-                cal.set(Calendar.MINUTE, d_alarmMinutes);
-                SetAlarmByDate(cal);
-                cal.add(Calendar.DAY_OF_YEAR,1);
-            }
+            cal.set(Calendar.HOUR_OF_DAY,d_alarmHour);
+            cal.set(Calendar.MINUTE,d_alarmMinutes);
+            SetAlarmByDate(cal);
         }else{
             LogUtil.LogString(dayOfWeek+"day is not setting");
         }
