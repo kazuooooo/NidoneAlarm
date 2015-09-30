@@ -10,11 +10,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageButton"
-        android:background="@drawable/ic_setting_light"
+        android:background="@drawable/siri"
         android:onClick="OnSetting"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:baselineAlignBottom="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,10 +24,8 @@
         android:id="@+id/timer"
         android:textSize="70sp"
         android:textStyle="bold"
-        android:layout_below="@+id/analogClock"
-        android:layout_toLeftOf="@+id/imageButton"
-        android:layout_toStartOf="@+id/imageButton"
-        android:layout_marginTop="60dp" />
+        android:layout_above="@+id/TimerButton"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"

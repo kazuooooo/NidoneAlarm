@@ -14,34 +14,18 @@
         android:id="@+id/isAlarmActive"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        />
+        android:foregroundGravity="left" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/weekCheck"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/weekCheck"
-        android:id="@+id/linearLayout"></LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/timePickerChild"
-        android:layout_alignBottom="@+id/linearLayout"></LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/weekCheck"
-        android:gravity="center_horizontal|bottom"
-        android:layout_alignParentLeft="true"
+        android:gravity="center_horizontal"
+        android:layout_alignParentLeft="false"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/timePickerChild">
+        android:layout_below="@+id/timePickerChild"
+        android:layout_alignParentTop="false">
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -120,14 +104,18 @@
     </LinearLayout>
 
     <TimePicker
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/timePickerChild"
         android:focusableInTouchMode="true"
         android:longClickable="true"
         android:layout_below="@+id/isAlarmActive"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:alpha="1" />
+        android:layout_alignParentStart="false"
+        android:alpha="1"
+        android:foregroundGravity="center"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_centerInParent="true"
+        />
 
 </RelativeLayout>

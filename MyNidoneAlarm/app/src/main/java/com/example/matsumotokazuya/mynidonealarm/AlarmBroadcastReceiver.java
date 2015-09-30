@@ -53,6 +53,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 .build();
         notification.flags = Notification.FLAG_INSISTENT;
 
+
         //
         //((AlarmHome)context).SetStatSurface();
         // 古い通知を削除

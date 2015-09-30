@@ -160,6 +160,7 @@ public class AlarmHome extends AppCompatActivity {
         LogUtil.LogString("Stop Alarm");
         NotificationManager notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
+        //notificationManager.cancel(0);
     }
 
     private void StartTimer(){
@@ -266,7 +267,7 @@ public class AlarmHome extends AppCompatActivity {
 
         //アラームをセットする
         AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-        am.set(AlarmManager.RTC, calendar.getTimeInMillis(), pending);
+        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending);
         LogUtil.LogString("set alarm" + CalendarUtil.GetCalendarInfo(calendar));
         Toast.makeText(getApplicationContext(),"SetAlarm",Toast.LENGTH_LONG).show();
     }
@@ -347,12 +348,13 @@ public class AlarmHome extends AppCompatActivity {
         LogUtil.LogString("gettouch");
         //TODO:まとめ
         //Notificationmanagerを使って今アクティブなActivitiを取得
-        StatusBarNotification[] nots = notificationManager.getActiveNotifications();
+        //StatusBarNotification[] nots = notificationManager.getActiveNotifications();
         //今回はアラームしか使ってないので何かあれば停止
-        for(StatusBarNotification not:nots){
-            LogUtil.LogString("stopalarm");
-            StopAlarm();
-        }
+//        for(StatusBarNotification not:nots){
+//            LogUtil.LogString("stopalarm");
+//            StopAlarm();
+//        }
+        StopAlarm();
         return super.onTouchEvent(event);
     }
 }
