@@ -35,7 +35,7 @@ import android.app.AlarmManager;
 import android.widget.Toast;
 
 
-public class AlarmHome extends AppCompatActivity {
+public class AlarmHome extends AppCompatActivity{
     private Timer mainTimer;
     private MainTimerTask mainTimerTask;
     private TextView countText;
@@ -81,7 +81,7 @@ public class AlarmHome extends AppCompatActivity {
         notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
 
-
+        //タイマーテキストを設定したときにスタートさせる
         timerSettingText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -93,6 +93,8 @@ public class AlarmHome extends AppCompatActivity {
                     //ソフトキーボードを閉じる
                     InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    //アラームを止める
+                    StopAlarm();
 
                     StartTimer();
 
@@ -164,14 +166,22 @@ public class AlarmHome extends AppCompatActivity {
     }
 
     private void StartTimer(){
+
         //テキスト部分入力不可処理
         timerSettingText.setVisibility(View.INVISIBLE);
         //ボタン自体の文字を変更
         timerButton.setVisibility(View.VISIBLE);
+
+        //タイマーの値を取得
+        String timerText = timerSettingText.getText().toString();
+        if(timerText.length() == 0){
+            LogUtil.LogString("timer null");
+            ResetTimer();
+            return;
+        }
+        int timerSettingMinutes = Integer.parseInt(timerText);
         //タイマーフラグをOn
         isTimerProcessing = true;
-        //タイマーの値を取得
-        int timerSettingMinutes = Integer.parseInt((timerSettingText.getText().toString()));
         //内部的な時間にも設定
         minutes = timerSettingMinutes;
         seconds = minutes * 60;
@@ -184,17 +194,21 @@ public class AlarmHome extends AppCompatActivity {
     }
 
     private void ResetTimer(){
-        //FlagOff
-        isTimerProcessing = false;
-        //完了処理
-        mainTimer.cancel();
+        if(isTimerProcessing) {
+            //完了処理
+            mainTimer.cancel();
+        }
         //ボタン自体の文字を変更
         timerButton.setVisibility(View.INVISIBLE);
         //テキスト部分入力不可処理
         timerSettingText.setVisibility(View.VISIBLE);
         //テキスト表示リセット
         countText.setText("00:00");
+        //FlagOff
+        isTimerProcessing = false;
     }
+
+
 
     public class MainTimerTask extends TimerTask {
         @Override

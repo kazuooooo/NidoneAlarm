@@ -52,6 +52,7 @@
         android:ems="10"
         android:id="@+id/TimerSettingText"
         android:layout_below="@+id/analogClock"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:numeric="integer" />
 
 </RelativeLayout>
