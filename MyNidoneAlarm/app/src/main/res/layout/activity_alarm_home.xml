@@ -30,12 +30,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:text="起きる"
         android:id="@+id/TimerButton"
         android:onClick="OnPushTimerButton"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible" />
+        android:layout_centerHorizontal="true" />
 
     <AnalogClock
         android:layout_width="wrap_content"

@@ -150,11 +150,8 @@ public class AlarmHome extends AppCompatActivity{
     }
 
     public void OnPushTimerButton(View view){
-        if(isTimerProcessing){
-            ResetTimer();
-        }else {
-            StartTimer();
-        }
+        StopAlarm();
+        ResetTimer();
     }
 
 
@@ -199,7 +196,7 @@ public class AlarmHome extends AppCompatActivity{
             mainTimer.cancel();
         }
         //ボタン自体の文字を変更
-        timerButton.setVisibility(View.INVISIBLE);
+       //timerButton.setVisibility(View.INVISIBLE);
         //テキスト部分入力不可処理
         timerSettingText.setVisibility(View.VISIBLE);
         //テキスト表示リセット
