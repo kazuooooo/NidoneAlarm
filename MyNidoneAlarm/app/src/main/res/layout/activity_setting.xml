@@ -123,20 +123,21 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="00:00"
-        android:id="@+id/textView2"
+        android:id="@+id/TimeTextD"
         android:layout_toRightOf="@+id/isAlarmActive"
         android:layout_marginTop="29dp"
-        android:layout_below="@+id/isAlarmActive" />
+        android:layout_below="@+id/isAlarmActive"
+        android:onClick="showTimePickerDialog" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="13:00"
-        android:id="@+id/textView4"
+        android:id="@+id/TimeTextY"
         android:layout_below="@+id/textView3"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2" />
+        android:layout_alignLeft="@+id/TimeTextD"
+        android:layout_alignStart="@+id/TimeTextD" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -152,7 +153,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="本当に起きないとやばい時間"
         android:id="@+id/textView3"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/TimeTextD"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="67dp" />

@@ -1,15 +1,22 @@
 package com.example.matsumotokazuya.mynidonealarm;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.io.File;
@@ -20,7 +27,7 @@ import java.io.ObjectOutputStream;
 import java.sql.Time;
 import java.util.HashMap;
 
-public class Setting extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+public class Setting extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, TimePickerDialog.OnTimeSetListener {
     private EditText timerSettingText;
     private SharedPreferences dataStore;
     private SharedPreferences.Editor dataEditor;
@@ -30,6 +37,9 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
     private HashMap<String,Boolean> DOWMap;
     private HashMap<String,CheckBox> DOWCheckBox;
     private String[] woddays;
+    private FragmentActivity fragmentActivity;
+    private TextView timeTextD;
+    private TextView timeTextY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +52,11 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
         isAlarmSettingSwitch.setOnCheckedChangeListener(this);
         settingTimePicker = (TimePicker)findViewById(R.id.timePickerChild);
         settingTimePickerChild = (TimePicker)findViewById(R.id.timePickerChild);
+
+        //設定時間テキスト
+        timeTextD = (TextView)findViewById(R.id.TimeTextD);
+        timeTextY = (TextView)findViewById(R.id.TimeTextY);
+
 
         dataStore = getSharedPreferences("DataStore", MODE_PRIVATE);
         dataEditor = dataStore.edit();
@@ -127,6 +142,16 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
         }
     }
 
+
+    @Override
+    public void onTimeSet(TimePicker view, int hour, int minutes) {
+            timeTextD.setText(ParseUtil.ParseIntToString(hour)+":"+ParseUtil.ParseIntToString(minutes));
+    }
+
+    public void showTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimePick();
+        newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
 
     private void RefrectSettingData(){
         //設定値を読み込み
