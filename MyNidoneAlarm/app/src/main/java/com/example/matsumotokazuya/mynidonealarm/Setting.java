@@ -28,12 +28,9 @@ import java.sql.Time;
 import java.util.HashMap;
 
 public class Setting extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, TimePickerDialog.OnTimeSetListener {
-    private EditText timerSettingText;
     private SharedPreferences dataStore;
     private SharedPreferences.Editor dataEditor;
     private Switch isAlarmSettingSwitch;
-    private TimePicker settingTimePicker;
-    private TimePicker settingTimePickerChild;
     private HashMap<String,Boolean> DOWMap;
     private HashMap<String,CheckBox> DOWCheckBox;
     private String[] woddays;
@@ -44,19 +41,18 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
     private TextView timeTextY;
     private int yabaHour;
     private int yabaMinutes;
-    private enum TimePickerSettingState{
+    private static enum TimePickerSettingState{
         DEKISETTING,
         YABASETTING,
         NONE
     }
-    TimePickerSettingState tpState;
+    public static TimePickerSettingState tpState;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-        timerSettingText = (EditText)findViewById(R.id.SettingTime);
         isAlarmSettingSwitch = (Switch)findViewById(R.id.isAlarmActive);
         //リスナー設定
         LogUtil.LogString("setonchangedlistenaer");
@@ -154,12 +150,14 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
             case DEKISETTING:
                 dataEditor.putInt("dekiAlarmTimeHour", hour);
                 dataEditor.putInt("dekiAlarmTimeMinutes", minutes);
+                dataEditor.commit();
                 LogUtil.LogString("save deki"+"hour"+hour+"minutes"+minutes);
                 SetTextTime(timeTextD, hour, minutes);
                 break;
             case YABASETTING:
                 dataEditor.putInt("yabaAlarmTimeHour", hour);
                 dataEditor.putInt("yabaAlarmTimeMinutes", minutes);
+                dataEditor.commit();
                 LogUtil.LogString("save yaba" + "hour" + hour + "minutes" + minutes);
                 SetTextTime(timeTextY, hour, minutes);
                 break;
@@ -168,15 +166,15 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
     }
 
     public void showDekiTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimePick();
-        newFragment.show(getSupportFragmentManager(), "timePicker");
         tpState = TimePickerSettingState.DEKISETTING;
+        DialogFragment newFragment = new TimePick();
+        newFragment.show(getSupportFragmentManager(), "dekitimePicker");
     }
 
     public void showYabaTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimePick();
-        newFragment.show(getSupportFragmentManager(), "timePicker");
         tpState = TimePickerSettingState.YABASETTING;
+        DialogFragment newFragment = new TimePick();
+        newFragment.show(getSupportFragmentManager(), "yabatimePicker");
     }
 
     private void SetTextTime(TextView v,int hour,int minutes){
