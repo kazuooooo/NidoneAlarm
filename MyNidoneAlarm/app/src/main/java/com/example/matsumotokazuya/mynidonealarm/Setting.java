@@ -121,7 +121,6 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
         boolean isAlarmSet = isAlarmSettingSwitch.isChecked();
         dataEditor.putBoolean("isAlarmSet", isAlarmSet);
 
-
         //曜日のチェック情報を保存
         //HashMapのsaveはObjectOutputStreamに書き換えたい　http://stackoverflow.com/questions/7944601/saving-a-hash-map-into-shared-preferences
         SaveDOWChecks();
@@ -155,11 +154,13 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
             case DEKISETTING:
                 dataEditor.putInt("dekiAlarmTimeHour", hour);
                 dataEditor.putInt("dekiAlarmTimeMinutes", minutes);
+                LogUtil.LogString("save deki"+"hour"+hour+"minutes"+minutes);
                 SetTextTime(timeTextD, hour, minutes);
                 break;
             case YABASETTING:
-                dataEditor.putInt("dekiAlarmTimeHour", hour);
-                dataEditor.putInt("dekiAlarmTimeMinutes", minutes);
+                dataEditor.putInt("yabaAlarmTimeHour", hour);
+                dataEditor.putInt("yabaAlarmTimeMinutes", minutes);
+                LogUtil.LogString("save yaba" + "hour" + hour + "minutes" + minutes);
                 SetTextTime(timeTextY, hour, minutes);
                 break;
         }
@@ -196,7 +197,7 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
         dekiHour = dataStore.getInt("dekiAlarmTimeHour", 0);
         dekiMinutes = dataStore.getInt("dekiAlarmTimeMinutes", 0);
         yabaHour = dataStore.getInt("yabaAlarmTimeHour",0);
-        yabaMinutes = dataStore.getInt("yabaAlarmTimeminutest",0);
+        yabaMinutes = dataStore.getInt("yabaAlarmTimeMinutes",0);
 
         //画面に反映
         isAlarmSettingSwitch.setChecked(d_isAlarmSetting);

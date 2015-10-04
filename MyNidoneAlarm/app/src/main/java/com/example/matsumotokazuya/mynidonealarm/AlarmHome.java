@@ -6,17 +6,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.service.notification.StatusBarNotification;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -54,12 +51,25 @@ public class AlarmHome extends AppCompatActivity{
     //DataStore設定値
     private SharedPreferences dataStore;
     private boolean d_isAlarmSetting;
-    private int d_alarmHour;
-    private int d_alarmMinutes;
+    private int d_dekiAlarmHour;
+    private int d_dekiAlarmMinutes;
+    private int d_yabaAlarmHour;
+    private int d_yabaAlarmMinutes;
     private HashMap<String,Boolean> DOWMap;
 
     //NotificationManager
     private NotificationManager notificationManager;
+
+    //二度寝ボタン
+    private Button[] nidoneButtons;
+    private Button nidoneButtonHalf;
+    private Button nidoneButtonQuarter;
+    private Button nidoneButtonOneEighth;
+    private Button nidoneTimeResetButton;
+
+    //dekiとyabaのCalendar値
+    Calendar dekiCalendarDate;
+    Calendar yabaCalendarDate;
 
 
 
@@ -70,39 +80,20 @@ public class AlarmHome extends AppCompatActivity{
         setContentView(R.layout.activity_alarm_home);
         //タイマーのテキストビューを取得
         countText = (TextView)findViewById(R.id.timer);
-        //タイマーのボタン
-        timerButton =(Button)findViewById(R.id.TimerButton);
-        //タイマーの設定テキスト編集
-        timerSettingText = (EditText)findViewById(R.id.TimerSettingText);
+
+        //二度寝ボタン
+        nidoneButtonHalf = (Button)findViewById(R.id.NidoneHalfButton);
+        nidoneButtonQuarter = (Button)findViewById(R.id.NidoneQuarterButton);
+        nidoneButtonOneEighth = (Button)findViewById(R.id.NidoneOneEighth);
+        nidoneButtons = new Button[]{nidoneButtonHalf,nidoneButtonQuarter,nidoneButtonOneEighth};
+        nidoneTimeResetButton = (Button)findViewById(R.id.NidoneTimeResetButton);
+
         //テスト
         mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
         mSoundId = mSoundPool.load(getApplicationContext(),R.raw.se_maoudamashii_chime14,0);
 
         notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-
-        //タイマーテキストを設定したときにスタートさせる
-        timerSettingText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                //EnterKeyが押されたかを判定
-                if (event.getAction() == KeyEvent.ACTION_DOWN
-                        && keyCode == KeyEvent.KEYCODE_ENTER) {
-
-                    //ソフトキーボードを閉じる
-                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    //アラームを止める
-                    StopAlarm();
-
-                    StartTimer();
-
-                    return true;
-                }
-                return false;
-            }
-        });
     }
 
     @Override
@@ -113,9 +104,10 @@ public class AlarmHome extends AppCompatActivity{
         ReadDataStore();
         //初回起動じゃなければアラームを設
         if(d_isAlarmSetting){
-        SetAlarms();
+            SetAlarms();
             LogUtil.LogString("Call SetAlarms");
         }
+
     }
 
 
@@ -149,7 +141,7 @@ public class AlarmHome extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void OnPushTimerButton(View view){
+    public void OnPushAwakeButton(View view){
         StopAlarm();
         ResetTimer();
     }
@@ -162,15 +154,9 @@ public class AlarmHome extends AppCompatActivity{
         //notificationManager.cancel(0);
     }
 
-    private void StartTimer(){
-
-        //テキスト部分入力不可処理
-        timerSettingText.setVisibility(View.INVISIBLE);
-        //ボタン自体の文字を変更
-        timerButton.setVisibility(View.VISIBLE);
-
+    public void StartTimer(View v){
         //タイマーの値を取得
-        String timerText = timerSettingText.getText().toString();
+        String timerText = ((Button)v).getText().toString();
         if(timerText.length() == 0){
             LogUtil.LogString("timer null");
             ResetTimer();
@@ -188,6 +174,8 @@ public class AlarmHome extends AppCompatActivity{
         this.mainTimerTask = new MainTimerTask();
         //タイマースケジュールを設定
         this.mainTimer.schedule(mainTimerTask, 1000, 1000);
+        //二度寝再設定ボタン表示
+        nidoneTimeResetButton.setVisibility(View.VISIBLE);
     }
 
     private void ResetTimer(){
@@ -195,10 +183,6 @@ public class AlarmHome extends AppCompatActivity{
             //完了処理
             mainTimer.cancel();
         }
-        //ボタン自体の文字を変更
-       //timerButton.setVisibility(View.INVISIBLE);
-        //テキスト部分入力不可処理
-        timerSettingText.setVisibility(View.VISIBLE);
         //テキスト表示リセット
         countText.setText("00:00");
         //FlagOff
@@ -242,9 +226,9 @@ public class AlarmHome extends AppCompatActivity{
 
     private void SetAlarms(){
 
-        LogUtil.LogString("d_hour"+d_alarmHour+"d_minutes"+d_alarmMinutes);
+        LogUtil.LogString("d_hour"+d_yabaAlarmHour+"d_minutes"+d_yabaAlarmMinutes);
         //設定時間と今の時間を比較してアラームが鳴るのが今日か明日かを決定
-        boolean isTommorow = GetTodayOrTommorowByTime(d_alarmHour, d_alarmMinutes);
+        boolean isTommorow = GetTodayOrTommorowByTime(d_yabaAlarmHour, d_yabaAlarmMinutes);
         //設定時間の曜日を取得
         String dayOfWeek = GetDayOfWeekByTime(isTommorow);
         //調べた曜日にアラームが設定されているか確認
@@ -254,8 +238,8 @@ public class AlarmHome extends AppCompatActivity{
                 cal.add(Calendar.DATE,1);
             }
 
-            cal.set(Calendar.HOUR_OF_DAY,d_alarmHour);
-            cal.set(Calendar.MINUTE,d_alarmMinutes);
+            cal.set(Calendar.HOUR_OF_DAY,d_yabaAlarmHour);
+            cal.set(Calendar.MINUTE,d_yabaAlarmMinutes);
             SetAlarmByDate(cal);
         }else{
             LogUtil.LogString(dayOfWeek+"day is not setting");
@@ -268,16 +252,18 @@ public class AlarmHome extends AppCompatActivity{
         //時間をセット
         Calendar calendar = settingCal;
         //秒は0にしとく
-        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.SECOND, 0);
 
         Intent intent = new Intent(getApplicationContext(), AlarmBroadcastReceiver.class);
-        PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
+        PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
 
         //アラームをセットする
         AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending);
         LogUtil.LogString("set alarm" + CalendarUtil.GetCalendarInfo(calendar));
         Toast.makeText(getApplicationContext(),"SetAlarm",Toast.LENGTH_LONG).show();
+        //tmp
+        yabaCalendarDate = settingCal;
     }
 
     private void OnTimerEnd(){
@@ -321,10 +307,10 @@ public class AlarmHome extends AppCompatActivity{
     private boolean GetTodayOrTommorowByTime(int hour,int minutes) {
         Calendar calendar = Calendar.getInstance();
         boolean isTommorow = false;
-        if (calendar.get(Calendar.HOUR_OF_DAY) > d_alarmHour) {
+        if (calendar.get(Calendar.HOUR_OF_DAY) > d_yabaAlarmHour) {
             isTommorow = true;
-        } else if (calendar.get(Calendar.HOUR_OF_DAY) == d_alarmHour) {
-            if (calendar.get(Calendar.MINUTE) > d_alarmMinutes) {
+        } else if (calendar.get(Calendar.HOUR_OF_DAY) == d_yabaAlarmHour) {
+            if (calendar.get(Calendar.MINUTE) > d_yabaAlarmMinutes) {
                 isTommorow = true;
             }
         }
@@ -335,10 +321,12 @@ public class AlarmHome extends AppCompatActivity{
     private void ReadDataStore(){
         dataStore = getSharedPreferences("DataStore", MODE_PRIVATE);
         d_isAlarmSetting = dataStore.getBoolean("isAlarmSet", false);
-        LogUtil.LogString("loaddata"+d_isAlarmSetting);
-        d_alarmHour = dataStore.getInt("alarmTimeHour", -1);
-        d_alarmMinutes = dataStore.getInt("alarmTimeMinutes",-1);
-        LogUtil.LogString("loaddata" + d_alarmHour + ":" + d_alarmMinutes);
+        d_dekiAlarmHour = dataStore.getInt("dekiAlarmTimeHour", -1);
+        d_dekiAlarmMinutes = dataStore.getInt("dekiAlarmTimeMinutes",-1);
+        d_yabaAlarmHour = dataStore.getInt("yabaAlarmTimeHour",-1);
+        d_yabaAlarmMinutes = dataStore.getInt("yabaAlarmTimeMinutes",-1);
+        LogUtil.LogString("dhour"+d_dekiAlarmHour+"dminute"+d_dekiAlarmMinutes);
+        LogUtil.LogString("yalarmhour"+d_yabaAlarmHour+"yabaalarmMinutes"+d_yabaAlarmMinutes);
         //map情報を読み込み
         try {
             File file = new File(getDir("data", MODE_PRIVATE), "map");
@@ -364,5 +352,12 @@ public class AlarmHome extends AppCompatActivity{
 //        }
         StopAlarm();
         return super.onTouchEvent(event);
+    }
+
+    public void SetNidoneButtonsTime(View v){
+        int[] times = NidoneCaliculator.CalcNidoneTimes(yabaCalendarDate);
+        for (int i = 0;i<=2;i++) {
+            nidoneButtons[i].setText(ParseUtil.ParseIntToString(times[i]));
+        }
     }
 }

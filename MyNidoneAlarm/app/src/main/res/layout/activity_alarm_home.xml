@@ -22,17 +22,17 @@
         android:layout_height="wrap_content"
         android:text="Timer"
         android:id="@+id/timer"
-        android:textSize="70sp"
+        android:textSize="50sp"
         android:textStyle="bold"
-        android:layout_above="@+id/TimerButton"
+        android:layout_below="@+id/analogClock"
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="起きる"
         android:id="@+id/TimerButton"
-        android:onClick="OnPushTimerButton"
+        android:onClick="OnPushAwakeButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
@@ -44,14 +44,54 @@
         android:layout_below="@+id/imageButton"
         android:layout_centerHorizontal="true" />
 
-    <EditText
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/TimerSettingText"
-        android:layout_below="@+id/analogClock"
-        android:layout_centerHorizontal="true"
-        android:numeric="integer" />
+        android:text="10"
+        android:id="@+id/NidoneOneEighth"
+        android:onClick="StartTimer"
+        android:layout_below="@+id/timer"
+        android:layout_toEndOf="@+id/timer"
+        android:layout_alignBottom="@+id/NidoneQuarterButton"
+        android:layout_toRightOf="@+id/timer" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="20"
+        android:id="@+id/NidoneHalfButton"
+        android:onClick="StartTimer"
+        android:layout_below="@+id/timer"
+        android:layout_toLeftOf="@+id/timer"
+        android:layout_toStartOf="@+id/timer" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="30"
+        android:id="@+id/NidoneQuarterButton"
+        android:onClick="StartTimer"
+        android:layout_below="@+id/timer"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="二度寝時間再設定"
+        android:id="@+id/NidoneTimeResetButton"
+        android:visibility="invisible"
+        android:layout_above="@+id/TimerButton"
+        android:layout_alignRight="@+id/imageButton"
+        android:layout_alignEnd="@+id/imageButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/NidoneHalfButton"
+        android:layout_alignEnd="@+id/NidoneHalfButton"
+        android:onClick="SetNidoneButtonsTime" />
 
 </RelativeLayout>
