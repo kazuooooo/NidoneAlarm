@@ -39,7 +39,18 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
     private String[] woddays;
     private FragmentActivity fragmentActivity;
     private TextView timeTextD;
+    private int dekiHour;
+    private int dekiMinutes;
     private TextView timeTextY;
+    private int yabaHour;
+    private int yabaMinutes;
+    private enum TimePickerSettingState{
+        DEKISETTING,
+        YABASETTING,
+        NONE
+    }
+    TimePickerSettingState tpState;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +61,6 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
         //リスナー設定
         LogUtil.LogString("setonchangedlistenaer");
         isAlarmSettingSwitch.setOnCheckedChangeListener(this);
-        settingTimePicker = (TimePicker)findViewById(R.id.timePickerChild);
-        settingTimePickerChild = (TimePicker)findViewById(R.id.timePickerChild);
 
         //設定時間テキスト
         timeTextD = (TextView)findViewById(R.id.TimeTextD);
@@ -111,12 +120,7 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
         //アラームのOn/Off
         boolean isAlarmSet = isAlarmSettingSwitch.isChecked();
         dataEditor.putBoolean("isAlarmSet", isAlarmSet);
-        //Timerの設定値を保存
-        Log.d("Destroy", "onpause call");
-        int alarmTimeHour = settingTimePicker.getCurrentHour();
-        dataEditor.putInt("alarmTimeHour", alarmTimeHour);
-        int alarmTimeMinutes = settingTimePicker.getCurrentMinute();
-        dataEditor.putInt("alarmTimeMinutes", alarmTimeMinutes);
+
 
         //曜日のチェック情報を保存
         //HashMapのsaveはObjectOutputStreamに書き換えたい　http://stackoverflow.com/questions/7944601/saving-a-hash-map-into-shared-preferences
@@ -145,24 +149,59 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
 
     @Override
     public void onTimeSet(TimePicker view, int hour, int minutes) {
-            timeTextD.setText(ParseUtil.ParseIntToString(hour)+":"+ParseUtil.ParseIntToString(minutes));
+
+        LogUtil.LogString("tpState" + tpState.toString());
+        switch (tpState){
+            case DEKISETTING:
+                dataEditor.putInt("dekiAlarmTimeHour", hour);
+                dataEditor.putInt("dekiAlarmTimeMinutes", minutes);
+                SetTextTime(timeTextD, hour, minutes);
+                break;
+            case YABASETTING:
+                dataEditor.putInt("dekiAlarmTimeHour", hour);
+                dataEditor.putInt("dekiAlarmTimeMinutes", minutes);
+                SetTextTime(timeTextY, hour, minutes);
+                break;
+        }
+        tpState = TimePickerSettingState.NONE;
     }
 
-    public void showTimePickerDialog(View v) {
+    public void showDekiTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePick();
         newFragment.show(getSupportFragmentManager(), "timePicker");
+        tpState = TimePickerSettingState.DEKISETTING;
+    }
+
+    public void showYabaTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimePick();
+        newFragment.show(getSupportFragmentManager(), "timePicker");
+        tpState = TimePickerSettingState.YABASETTING;
+    }
+
+    private void SetTextTime(TextView v,int hour,int minutes){
+        String hourString = ParseUtil.ParseIntToString(hour);
+        String minuteString = ParseUtil.ParseIntToString(minutes);
+        if(hour<10){
+            hourString = "0"+hourString;
+        }
+        if(minutes<10){
+            minuteString = "0"+minuteString;
+        }
+        v.setText(hourString+":"+minuteString);
     }
 
     private void RefrectSettingData(){
         //設定値を読み込み
         boolean d_isAlarmSetting = dataStore.getBoolean("isAlarmSet", false);
-        int d_alarmHour = dataStore.getInt("alarmTimeHour", 0);
-        int d_alarmMinutes = dataStore.getInt("alarmTimeMinutes", 0);
+        dekiHour = dataStore.getInt("dekiAlarmTimeHour", 0);
+        dekiMinutes = dataStore.getInt("dekiAlarmTimeMinutes", 0);
+        yabaHour = dataStore.getInt("yabaAlarmTimeHour",0);
+        yabaMinutes = dataStore.getInt("yabaAlarmTimeminutest",0);
 
         //画面に反映
         isAlarmSettingSwitch.setChecked(d_isAlarmSetting);
-        settingTimePicker.setCurrentHour(d_alarmHour);
-        settingTimePicker.setCurrentMinute(d_alarmMinutes);
+        SetTextTime(timeTextD, dekiHour, dekiMinutes);
+        SetTextTime(timeTextY,yabaHour,yabaMinutes);
 
         //曜日部分
         try {
@@ -190,23 +229,23 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
 
     private void ChangeSettingState(boolean canSet){
             //入力可否
-            settingTimePicker.setEnabled(canSet);
-            settingTimePickerChild.setEnabled(canSet);
+            timeTextY.setEnabled(canSet);
+            timeTextD.setEnabled(canSet);
             for (String dow:woddays) {
                 DOWCheckBox.get(dow).setEnabled(canSet);
             }
             //Alpha変更
         if(canSet) {
-            settingTimePicker.setAlpha(1);
-            settingTimePickerChild.setAlpha(1);
+            timeTextY.setAlpha(1);
+            timeTextD.setAlpha(1);
             for (String dow:woddays) {
                 DOWCheckBox.get(dow).setAlpha(1);
             }
         }else{
-            settingTimePicker.setAlpha(0.5f);
-            settingTimePickerChild.setAlpha(0.5f);
+            timeTextY.setAlpha(0.7f);
+            timeTextD.setAlpha(0.7f);
             for (String dow:woddays) {
-                DOWCheckBox.get(dow).setAlpha(0.5f);
+                DOWCheckBox.get(dow).setAlpha(0.7f);
             }
         }
     }
