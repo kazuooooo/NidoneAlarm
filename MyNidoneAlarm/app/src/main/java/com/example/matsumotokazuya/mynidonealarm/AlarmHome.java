@@ -50,11 +50,13 @@ public class AlarmHome extends AppCompatActivity{
 
     //DataStore設定値
     private SharedPreferences dataStore;
+    private SharedPreferences.Editor dataEditor;
     private boolean d_isAlarmSetting;
     private int d_dekiAlarmHour;
     private int d_dekiAlarmMinutes;
     private int d_yabaAlarmHour;
     private int d_yabaAlarmMinutes;
+    private int d_intentId;
     private HashMap<String,Boolean> DOWMap;
 
     //NotificationManager
@@ -225,10 +227,20 @@ public class AlarmHome extends AppCompatActivity{
 
 
     private void SetAlarms(){
+        //dalarmは普通に設定
+        SetAlarm(d_dekiAlarmHour, d_dekiAlarmMinutes,false,"DEKI");
+        //dekiとyabaを比較してyabaの方が時間が前なら１日ずらす
+        boolean ytommorow = false;
+        if((d_yabaAlarmHour<d_dekiAlarmHour)||(d_yabaAlarmHour==d_dekiAlarmHour && d_yabaAlarmMinutes < d_dekiAlarmMinutes)){
+            ytommorow = true;
+        }
+        SetAlarm(d_yabaAlarmHour, d_yabaAlarmMinutes,ytommorow,"YABA");
+    }
 
-        LogUtil.LogString("d_hour"+d_yabaAlarmHour+"d_minutes"+d_yabaAlarmMinutes);
+    private void SetAlarm(int hour,int minute,boolean ytommorrow,String type) {
+        LogUtil.LogString("d_hour" + hour + "d_minutes" + minute);
         //設定時間と今の時間を比較してアラームが鳴るのが今日か明日かを決定
-        boolean isTommorow = GetTodayOrTommorowByTime(d_yabaAlarmHour, d_yabaAlarmMinutes);
+        boolean isTommorow = GetTodayOrTommorowByTime(hour, minute);
         //設定時間の曜日を取得
         String dayOfWeek = GetDayOfWeekByTime(isTommorow);
         //調べた曜日にアラームが設定されているか確認
@@ -237,10 +249,13 @@ public class AlarmHome extends AppCompatActivity{
             if(isTommorow){
                 cal.add(Calendar.DATE,1);
             }
+            if(ytommorrow){
+                cal.add(Calendar.DATE,1);
+            }
 
-            cal.set(Calendar.HOUR_OF_DAY,d_yabaAlarmHour);
-            cal.set(Calendar.MINUTE,d_yabaAlarmMinutes);
-            SetAlarmByDate(cal);
+            cal.set(Calendar.HOUR_OF_DAY,hour);
+            cal.set(Calendar.MINUTE,minute);
+            SetAlarmByDate(cal,type);
         }else{
             LogUtil.LogString(dayOfWeek+"day is not setting");
         }
@@ -248,13 +263,16 @@ public class AlarmHome extends AppCompatActivity{
 
 
 
-    private void SetAlarmByDate(Calendar settingCal){
+    private void SetAlarmByDate(Calendar settingCal,String type){
         //時間をセット
         Calendar calendar = settingCal;
         //秒は0にしとく
         calendar.set(Calendar.SECOND, 0);
 
         Intent intent = new Intent(getApplicationContext(), AlarmBroadcastReceiver.class);
+        //intentにidを渡す
+        intent.putExtra("intentId", GetIntentId());
+        intent.putExtra("alarmType",type);
         PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
 
         //アラームをセットする
@@ -262,12 +280,11 @@ public class AlarmHome extends AppCompatActivity{
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending);
         LogUtil.LogString("set alarm" + CalendarUtil.GetCalendarInfo(calendar));
         Toast.makeText(getApplicationContext(),"SetAlarm",Toast.LENGTH_LONG).show();
-        //tmp
-        yabaCalendarDate = settingCal;
     }
 
     private void OnTimerEnd(){
         Intent intent = new Intent(getApplicationContext(), AlarmBroadcastReceiver.class);
+        intent.putExtra("alarmType","TIMER");
         sendBroadcast(intent);
         ResetTimer();
     }
@@ -320,13 +337,14 @@ public class AlarmHome extends AppCompatActivity{
 
     private void ReadDataStore(){
         dataStore = getSharedPreferences("DataStore", MODE_PRIVATE);
+        dataEditor = dataStore.edit();
         d_isAlarmSetting = dataStore.getBoolean("isAlarmSet", false);
         d_dekiAlarmHour = dataStore.getInt("dekiAlarmTimeHour", -1);
         d_dekiAlarmMinutes = dataStore.getInt("dekiAlarmTimeMinutes",-1);
         d_yabaAlarmHour = dataStore.getInt("yabaAlarmTimeHour",-1);
         d_yabaAlarmMinutes = dataStore.getInt("yabaAlarmTimeMinutes",-1);
-        LogUtil.LogString("dhour"+d_dekiAlarmHour+"dminute"+d_dekiAlarmMinutes);
-        LogUtil.LogString("yalarmhour"+d_yabaAlarmHour+"yabaalarmMinutes"+d_yabaAlarmMinutes);
+        //intentIdを設定
+
         //map情報を読み込み
         try {
             File file = new File(getDir("data", MODE_PRIVATE), "map");
@@ -336,6 +354,14 @@ public class AlarmHome extends AppCompatActivity{
         }catch (Exception e){
 
         }
+    }
+
+    private int GetIntentId(){
+        int val = dataStore.getInt("intentId",0);
+        dataEditor.putInt("intentId",val+1);
+        dataEditor.commit();
+        LogUtil.LogString("send id");
+        return val;
     }
 
     //アラームが鳴っているときはタップでアラームを止める

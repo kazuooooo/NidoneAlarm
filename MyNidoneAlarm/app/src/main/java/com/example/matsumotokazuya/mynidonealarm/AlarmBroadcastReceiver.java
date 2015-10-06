@@ -32,10 +32,19 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context,Intent intent){
         LogUtil.LogString("CallNotify");
         int bid = intent.getIntExtra("intentId",0);
+        String alarmType = intent.getStringExtra("alarmType");
         // RecieverからMainActivityを起動させる
         Intent intent2 = new Intent(context, AlarmHome.class);
-
+        //音を設定
         Uri path = Uri.parse("android.resource://com.example.matsumotokazuya.mynidonealarm/" + R.raw.se_maoudamashii_chime14);
+//        switch (alarmType){
+//            case "DEKI":
+//                path = Uri.parse("android.resource://com.example.matsumotokazuya.mynidonealarm/" + R.raw.se_maoudamashii_chime14);
+//                break;
+//            case "YABA":
+//                break;
+//        }
+
         PendingIntent pendingIntent = PendingIntent.getActivity(context, bid, intent2, 0);
 
         notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
