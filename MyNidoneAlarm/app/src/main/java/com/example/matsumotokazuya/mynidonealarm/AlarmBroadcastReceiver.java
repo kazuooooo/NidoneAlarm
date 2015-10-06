@@ -7,14 +7,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.PowerManager;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
-import android.widget.Toast;
 
-import java.net.URI;
 import android.net.Uri;
 
 /**
@@ -37,13 +32,14 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         Intent intent2 = new Intent(context, AlarmHome.class);
         //音を設定
         Uri path = Uri.parse("android.resource://com.example.matsumotokazuya.mynidonealarm/" + R.raw.se_maoudamashii_chime14);
-//        switch (alarmType){
-//            case "DEKI":
-//                path = Uri.parse("android.resource://com.example.matsumotokazuya.mynidonealarm/" + R.raw.se_maoudamashii_chime14);
-//                break;
-//            case "YABA":
-//                break;
-//        }
+        switch (alarmType){
+            case "DEKI":
+                path = Uri.parse("android.resource://com.example.matsumotokazuya.mynidonealarm/" + R.raw.jingle);
+                break;
+            case "TIMER":
+                path = Uri.parse("android.resource://com.example.matsumotokazuya.mynidonealarm/" + R.raw.transition);
+                break;
+        }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, bid, intent2, 0);
 

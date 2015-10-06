@@ -324,10 +324,10 @@ public class AlarmHome extends AppCompatActivity{
     private boolean GetTodayOrTommorowByTime(int hour,int minutes) {
         Calendar calendar = Calendar.getInstance();
         boolean isTommorow = false;
-        if (calendar.get(Calendar.HOUR_OF_DAY) > d_yabaAlarmHour) {
+        if (calendar.get(Calendar.HOUR_OF_DAY) > hour) {
             isTommorow = true;
-        } else if (calendar.get(Calendar.HOUR_OF_DAY) == d_yabaAlarmHour) {
-            if (calendar.get(Calendar.MINUTE) > d_yabaAlarmMinutes) {
+        } else if (calendar.get(Calendar.HOUR_OF_DAY) == hour) {
+            if (calendar.get(Calendar.MINUTE) > minutes) {
                 isTommorow = true;
             }
         }
