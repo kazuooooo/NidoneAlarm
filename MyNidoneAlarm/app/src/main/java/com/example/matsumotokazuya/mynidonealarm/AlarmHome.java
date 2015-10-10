@@ -273,7 +273,7 @@ public class AlarmHome extends AppCompatActivity{
         //intentにidを渡す
         intent.putExtra("intentId", GetIntentId());
         intent.putExtra("alarmType",type);
-        PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+        PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(), GetIntentId(), intent, 0);
 
         //アラームをセットする
         AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
