@@ -40,6 +40,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 path = Uri.parse("android.resource://com.example.matsumotokazuya.mynidonealarm/" + R.raw.transition);
                 break;
         }
+        AlarmHome.isAlarmRinging = true;
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, bid, intent2, 0);
 
@@ -68,6 +69,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 | PowerManager.ON_AFTER_RELEASE, "Your App Tag");
         wakelock.acquire();
         wakelock.release();
+
 
         //
         //((AlarmHome)context).SetStatSurface();

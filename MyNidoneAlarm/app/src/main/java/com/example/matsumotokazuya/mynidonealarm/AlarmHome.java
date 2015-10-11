@@ -73,6 +73,9 @@ public class AlarmHome extends AppCompatActivity{
     Calendar dekiCalendarDate;
     Calendar yabaCalendarDate;
 
+    public static Boolean isAlarmRinging;
+
+
 
 
     @Override
@@ -96,6 +99,17 @@ public class AlarmHome extends AppCompatActivity{
 
         notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
+        if(isAlarmRinging == null){
+            isAlarmRinging = false;
+        }
+        if(isAlarmRinging){
+            //true
+            LogUtil.LogString("AlarmRign!!");
+        }else{
+            //null or false
+            LogUtil.LogString("Alarm Not Ring");
+        }
+        LogUtil.LogString(isAlarmRinging.toString());
     }
 
     @Override
@@ -228,7 +242,7 @@ public class AlarmHome extends AppCompatActivity{
 
     private void SetAlarms(){
         //dalarmは普通に設定
-        SetAlarm(d_dekiAlarmHour, d_dekiAlarmMinutes,false,"DEKI");
+        SetAlarm(d_dekiAlarmHour, d_dekiAlarmMinutes, false, "DEKI");
         //dekiとyabaを比較してyabaの方が時間が前なら１日ずらす
         boolean ytommorow = false;
         if((d_yabaAlarmHour<d_dekiAlarmHour)||(d_yabaAlarmHour==d_dekiAlarmHour && d_yabaAlarmMinutes < d_dekiAlarmMinutes)){
@@ -272,7 +286,7 @@ public class AlarmHome extends AppCompatActivity{
         Intent intent = new Intent(getApplicationContext(), AlarmBroadcastReceiver.class);
         //intentにidを渡す
         intent.putExtra("intentId", GetIntentId());
-        intent.putExtra("alarmType",type);
+        intent.putExtra("alarmType", type);
         PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(), GetIntentId(), intent, 0);
 
         //アラームをセットする
@@ -280,11 +294,14 @@ public class AlarmHome extends AppCompatActivity{
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending);
         LogUtil.LogString("set alarm" + CalendarUtil.GetCalendarInfo(calendar));
         Toast.makeText(getApplicationContext(),"SetAlarm",Toast.LENGTH_LONG).show();
+        if(type == "YABA"){
+            yabaCalendarDate = settingCal;
+        }
     }
 
     private void OnTimerEnd(){
         Intent intent = new Intent(getApplicationContext(), AlarmBroadcastReceiver.class);
-        intent.putExtra("alarmType","TIMER");
+        intent.putExtra("alarmType", "TIMER");
         sendBroadcast(intent);
         ResetTimer();
     }
@@ -357,7 +374,7 @@ public class AlarmHome extends AppCompatActivity{
     }
 
     private int GetIntentId(){
-        int val = dataStore.getInt("intentId",0);
+        int val = dataStore.getInt("intentId", 0);
         dataEditor.putInt("intentId",val+1);
         dataEditor.commit();
         LogUtil.LogString("send id");
