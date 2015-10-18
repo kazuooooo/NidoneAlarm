@@ -75,8 +75,7 @@ public class AlarmHome extends AppCompatActivity{
 
     public static Boolean isAlarmRinging;
 
-
-
+    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,14 +118,11 @@ public class AlarmHome extends AppCompatActivity{
         //dataStore
         ReadDataStore();
         //初回起動じゃなければアラームを設
-        if(d_isAlarmSetting){
-            SetAlarms();
-            LogUtil.LogString("Call SetAlarms");
-        }
-
+//        if(d_isAlarmSetting){
+//            SetAlarms();
+//            LogUtil.LogString("Call SetAlarms by AlarmHome");
+//        }
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -94,7 +94,7 @@ public class NidoneAlarmManager {
         //秒は0にしとく
         calendar.set(Calendar.SECOND, 0);
         //context
-        appContext = AlarmHome.getAppContext();
+        appContext = MyApplication.getAppContext();
 
         Intent intent = new Intent(appContext, AlarmBroadcastReceiver.class);
         //intentにidを渡す
@@ -106,7 +106,7 @@ public class NidoneAlarmManager {
         AlarmManager am = (AlarmManager)appContext.getSystemService(appContext.ALARM_SERVICE);
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending);
         LogUtil.LogString("set alarm" + CalendarUtil.GetCalendarInfo(calendar));
-        Toast.makeText(AlarmHome.getAppContext(), "SetAlarm", Toast.LENGTH_LONG).show();
+        Toast.makeText(MyApplication.getAppContext(), "SetAlarm", Toast.LENGTH_LONG).show();
         if(type == "YABA"){
             yabaCalendarDate = settingCal;
         }
@@ -167,7 +167,7 @@ public class NidoneAlarmManager {
     }
 
     private void ReadDataStore(){
-        appContext = AlarmHome.getAppContext();
+        appContext = MyApplication.getAppContext();
 
         dataStore = appContext.getSharedPreferences("DataStore", appContext.MODE_PRIVATE);
         dataEditor = dataStore.edit();
