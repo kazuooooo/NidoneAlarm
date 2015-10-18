@@ -111,6 +111,9 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
     public void onPause(){
         super.onPause();
         SaveSettingData();
+        //アラームを設定
+        NidoneAlarmManager nidoneAlarmManager = NidoneAlarmManager.getInstance();
+        nidoneAlarmManager.SetAlarms();
     }
 
     private void SaveSettingData(){
