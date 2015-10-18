@@ -53,7 +53,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 .setContentTitle("TestAlarm2")
                 .setContentText("時間になりました")
                         // 音、バイブレート、LEDで通知
-              //  .setDefaults(Notification.DEFAULT_ALL)
+                .setDefaults(Notification.DEFAULT_VIBRATE)
                         // 通知をタップした時にMainActivityを立ち上げる
                 .setContentIntent(pendingIntent)
                 .setSound(path)
