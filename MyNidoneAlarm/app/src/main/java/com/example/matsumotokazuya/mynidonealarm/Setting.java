@@ -106,7 +106,8 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
 
         return super.onOptionsItemSelected(item);
     }
-@Override
+    //OnPauseでアラームを設定
+    @Override
     public void onPause(){
         super.onPause();
         SaveSettingData();
@@ -121,6 +122,8 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
         //HashMapのsaveはObjectOutputStreamに書き換えたい　http://stackoverflow.com/questions/7944601/saving-a-hash-map-into-shared-preferences
         SaveDOWChecks();
         dataEditor.commit();
+
+        LogUtil.LogString("Call AlarmSetting!!");
     }
 
     private void SaveDOWChecks(){
@@ -199,6 +202,7 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
 
         //画面に反映
         isAlarmSettingSwitch.setChecked(d_isAlarmSetting);
+        ChangeSettingState(d_isAlarmSetting);
         SetTextTime(timeTextD, dekiHour, dekiMinutes);
         SetTextTime(timeTextY,yabaHour,yabaMinutes);
 
