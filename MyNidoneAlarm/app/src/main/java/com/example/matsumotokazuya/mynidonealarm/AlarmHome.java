@@ -401,6 +401,9 @@ public class AlarmHome extends AppCompatActivity{
         int[] times = NidoneCaliculator.CalcNidoneTimes(yabaCalendarDate);
         for (int i = 0;i<=2;i++) {
             nidoneButtons[i].setText(ParseUtil.ParseIntToString(times[i]));
+            if(times[i] == 0){
+                nidoneButtons[i].setEnabled(false);
+            }
         }
     }
 }
