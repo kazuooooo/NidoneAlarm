@@ -12,6 +12,7 @@ import android.support.v7.app.NotificationCompat;
 
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by matsumotokazuya on 2015/09/13.
@@ -71,6 +72,11 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 | PowerManager.ON_AFTER_RELEASE, "Your App Tag");
         wakelock.acquire();
         wakelock.release();
+
+        // ロック外したらメインアクティビティが起動する
+        Intent appopenintent = new Intent(context, AlarmHome.class);
+        appopenintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(appopenintent);
 
         // 古い通知を削除
         notificationManager.cancelAll();

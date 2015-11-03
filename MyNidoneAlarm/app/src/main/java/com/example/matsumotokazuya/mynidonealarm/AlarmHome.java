@@ -125,6 +125,14 @@ public class AlarmHome extends AppCompatActivity{
     }
 
     @Override
+    public void onPause(){
+//        super.onPause();
+//        //アラームを設定
+//        NidoneAlarmManager nidoneAlarmManager = NidoneAlarmManager.getInstance();
+//        nidoneAlarmManager.SetAlarms();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_alarm_home, menu);
