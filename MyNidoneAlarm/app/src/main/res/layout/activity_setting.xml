@@ -39,6 +39,7 @@
         android:text="00:00"
         android:id="@+id/TimeTextD"
         android:onClick="showDekiTimePickerDialog"
+        android:clickable="true"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -64,6 +65,7 @@
         android:layout_below="@+id/textView3"
         android:layout_alignLeft="@+id/TimeTextD"
         android:layout_alignStart="@+id/TimeTextD"
+        android:clickable="true"
         android:onClick="showYabaTimePickerDialog" />
 
     <TextView
@@ -209,6 +211,47 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/timePickerChild"
                 android:layout_column="10" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Button"
+                android:id="@+id/button2"
+                android:layout_column="8"
+                android:onClick="showDekiTimePickerDialog" />
         </TableRow>
 
     </TableLayout>

@@ -172,6 +172,7 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
     }
 
     public void showDekiTimePickerDialog(View v) {
+        LogUtil.LogString("call timepicker");
         tpState = TimePickerSettingState.DEKISETTING;
         DialogFragment newFragment = new TimePick();
         newFragment.show(getSupportFragmentManager(), "dekitimePicker");

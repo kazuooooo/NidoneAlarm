@@ -47,11 +47,9 @@ public class NidoneAlarmManager {
     Calendar yabaCalendarDate;
     //Context
     Context appContext;
-    public void Test(String val){
-        LogUtil.LogString("hi this is alarm manager");
-    }
 
     public void SetAlarms(){
+        LogUtil.LogString("set alrams");
         //設定値を読み込み
         ReadDataStore();
         //dalarmは普通に設定
