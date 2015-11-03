@@ -11,6 +11,7 @@ import android.os.PowerManager;
 import android.support.v7.app.NotificationCompat;
 
 import android.net.Uri;
+import android.util.Log;
 
 /**
  * Created by matsumotokazuya on 2015/09/13.
@@ -26,6 +27,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context,Intent intent){
         LogUtil.LogString("CallNotify");
+
         int bid = intent.getIntExtra("intentId",0);
         String alarmType = intent.getStringExtra("alarmType");
         // RecieverからMainActivityを起動させる
@@ -70,9 +72,6 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         wakelock.acquire();
         wakelock.release();
 
-
-        //
-        //((AlarmHome)context).SetStatSurface();
         // 古い通知を削除
         notificationManager.cancelAll();
         // 通知
