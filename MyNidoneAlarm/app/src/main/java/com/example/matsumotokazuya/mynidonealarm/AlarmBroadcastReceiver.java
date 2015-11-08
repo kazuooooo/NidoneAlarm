@@ -73,7 +73,10 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         wakelock.release();
 
         // ロック外したらメインアクティビティが起動する
+        //about stack http://techblog.qoncept.jp/?p=102
+        //about setFlags http://it-trick-java.appspot.com/android/c9001/page7151.html
         Intent appopenintent = new Intent(context, AlarmHome.class);
+        //TODO:ここが原因で毎回新しいタスクが起動している。
         appopenintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         appopenintent.putExtra("isAlarmRinging", 1);
         context.startActivity(appopenintent);

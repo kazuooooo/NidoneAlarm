@@ -163,6 +163,8 @@ public class AlarmHome extends AppCompatActivity{
     }
 
     public void StartTimer(View v){
+        //dekiアラームを止める
+        StopAlarm();
         //タイマーの値を取得
         String timerText = ((Button)v).getText().toString();
         if(timerText.length() == 0){
