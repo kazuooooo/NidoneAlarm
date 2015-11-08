@@ -32,6 +32,8 @@ import android.app.PendingIntent;
 import android.app.AlarmManager;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.TypefaceProvider;
+
 
 public class AlarmHome extends AppCompatActivity{
     private Timer mainTimer;
@@ -81,7 +83,7 @@ public class AlarmHome extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.activity_alarm_home);
         //タイマーのテキストビューを取得
         countText = (TextView)findViewById(R.id.timer);

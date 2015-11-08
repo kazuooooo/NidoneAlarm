@@ -1,9 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".AlarmHome"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".AlarmHome"
     android:id="@+id/RelativeLayout">
 
     <ImageButton
@@ -27,7 +31,7 @@
         android:layout_below="@+id/analogClock"
         android:layout_centerHorizontal="true" />
 
-    <Button
+    <com.beardedhen.androidbootstrap.BootstrapButton
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="起きる"
@@ -35,7 +39,11 @@
         android:onClick="OnPushAwakeButton"
         android:layout_below="@+id/NidoneOneEighth"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        app:bootstrapBrand="primary"
+        app:showOutline="true"
+        app:roundedCorners="true"
+        />
 
     <AnalogClock
         android:layout_width="wrap_content"
@@ -45,6 +53,7 @@
         android:layout_below="@+id/imageButton"
         android:layout_centerHorizontal="true" />
 
+    
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
