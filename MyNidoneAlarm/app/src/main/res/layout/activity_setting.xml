@@ -273,5 +273,12 @@
 
     </TableLayout>
 
+    <ImageView
+        android:layout_width="319dp"
+        android:layout_height="70dp"
+        android:id="@+id/imageView"
+        android:background="@drawable/nidonekunyoko"
+        android:layout_marginTop="35dp"
+        />
 
 </LinearLayout>
