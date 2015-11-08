@@ -43,7 +43,6 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 path = Uri.parse("android.resource://com.example.matsumotokazuya.mynidonealarm/" + R.raw.transition);
                 break;
         }
-        AlarmHome.isAlarmRinging = true;
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, bid, intent2, 0);
 
@@ -76,6 +75,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         // ロック外したらメインアクティビティが起動する
         Intent appopenintent = new Intent(context, AlarmHome.class);
         appopenintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("isAlarmRinging", 1);
         context.startActivity(appopenintent);
 
         // 古い通知を削除

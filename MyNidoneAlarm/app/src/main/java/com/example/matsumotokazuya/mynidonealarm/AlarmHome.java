@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.service.notification.StatusBarNotification;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -73,7 +74,7 @@ public class AlarmHome extends AppCompatActivity{
     Calendar dekiCalendarDate;
     Calendar yabaCalendarDate;
 
-    public static Boolean isAlarmRinging;
+    public static int isAlarmRinging;
 
     private static Context context;
 
@@ -98,17 +99,15 @@ public class AlarmHome extends AppCompatActivity{
 
         notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if(isAlarmRinging == null){
-            isAlarmRinging = false;
-        }
-        if(isAlarmRinging){
-            //true
-            LogUtil.LogString("AlarmRign!!");
+       StatusBarNotification[] activeNotifs = notificationManager.getActiveNotifications();
+        Intent openIntent = getIntent();
+        //アラームが鳴っているかを判定
+        isAlarmRinging = openIntent.getIntExtra("isAlarmRinging",0);
+        if(isAlarmRinging == 1){
+            LogUtil.LogString("alarm is ringing");
         }else{
-            //null or false
-            LogUtil.LogString("Alarm Not Ring");
+            LogUtil.LogString("alarm not ring");
         }
-        LogUtil.LogString(isAlarmRinging.toString());
     }
 
     @Override
@@ -117,19 +116,6 @@ public class AlarmHome extends AppCompatActivity{
 
         //dataStore
         ReadDataStore();
-        //初回起動じゃなければアラームを設
-//        if(d_isAlarmSetting){
-//            SetAlarms();
-//            LogUtil.LogString("Call SetAlarms by AlarmHome");
-//        }
-    }
-
-    @Override
-    public void onPause(){
-//        super.onPause();
-//        //アラームを設定
-//        NidoneAlarmManager nidoneAlarmManager = NidoneAlarmManager.getInstance();
-//        nidoneAlarmManager.SetAlarms();
     }
 
     @Override
@@ -158,6 +144,7 @@ public class AlarmHome extends AppCompatActivity{
     public void OnSetting(View view){
         Log.d("check", "this is check");
         Intent intent = new Intent(this, Setting.class);
+        //intent.putExtra("test",15);
         startActivity(intent);
     }
 
@@ -401,7 +388,7 @@ public class AlarmHome extends AppCompatActivity{
         return super.onTouchEvent(event);
     }
 
-    public void SetNidoneButtonsTime(View v){
+    public void SetNidoneButtonsTime(){
         int[] times = NidoneCaliculator.CalcNidoneTimes(yabaCalendarDate);
         for (int i = 0;i<=2;i++) {
             nidoneButtons[i].setText(ParseUtil.ParseIntToString(times[i]));
@@ -409,5 +396,12 @@ public class AlarmHome extends AppCompatActivity{
                 nidoneButtons[i].setEnabled(false);
             }
         }
+    }
+
+    public void ShowNidoneAlarm(){
+        //TODO:タイマー周りを表示、非表示
+        //時間をセット
+        LogUtil.LogString("call show nidone alarm");
+        SetNidoneButtonsTime();
     }
 }

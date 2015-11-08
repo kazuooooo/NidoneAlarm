@@ -2,6 +2,7 @@ package com.example.matsumotokazuya.mynidonealarm;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -75,6 +76,11 @@ public class Setting extends AppCompatActivity implements CompoundButton.OnCheck
         DOWCheckBox.put("Sat",(CheckBox) findViewById(R.id.checkSat));
         DOWCheckBox.put("Sun",(CheckBox) findViewById(R.id.checkSun));
         woddays = new String[]{"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
+
+//        Intent intent = getIntent();
+//        int testval = intent.getIntExtra("test",0);
+//        LogUtil.LogInt(testval);
+
     }
 
     @Override

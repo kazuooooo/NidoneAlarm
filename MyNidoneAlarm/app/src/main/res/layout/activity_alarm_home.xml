@@ -33,8 +33,9 @@
         android:text="起きる"
         android:id="@+id/TimerButton"
         android:onClick="OnPushAwakeButton"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/NidoneOneEighth"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <AnalogClock
         android:layout_width="wrap_content"
@@ -83,15 +84,5 @@
         android:layout_above="@+id/TimerButton"
         android:layout_alignRight="@+id/imageButton"
         android:layout_alignEnd="@+id/imageButton" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/NidoneHalfButton"
-        android:layout_alignEnd="@+id/NidoneHalfButton"
-        android:onClick="SetNidoneButtonsTime" />
 
 </RelativeLayout>
