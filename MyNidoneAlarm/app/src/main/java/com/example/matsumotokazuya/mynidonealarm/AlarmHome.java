@@ -32,6 +32,7 @@ import android.app.PendingIntent;
 import android.app.AlarmManager;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.beardedhen.androidbootstrap.TypefaceProvider;
 
 
@@ -66,11 +67,11 @@ public class AlarmHome extends AppCompatActivity{
     private NotificationManager notificationManager;
 
     //二度寝ボタン
-    private Button[] nidoneButtons;
-    private Button nidoneButtonHalf;
-    private Button nidoneButtonQuarter;
-    private Button nidoneButtonOneEighth;
-    private Button nidoneTimeResetButton;
+    private BootstrapButton[] nidoneButtons;
+    private BootstrapButton nidoneButtonHalf;
+    private BootstrapButton nidoneButtonQuarter;
+    private BootstrapButton nidoneButtonOneEighth;
+    private BootstrapButton nidoneTimeResetButton;
 
     //dekiとyabaのCalendar値
     Calendar dekiCalendarDate;
@@ -89,11 +90,11 @@ public class AlarmHome extends AppCompatActivity{
         countText = (TextView)findViewById(R.id.timer);
 
         //二度寝ボタン
-        nidoneButtonHalf = (Button)findViewById(R.id.NidoneHalfButton);
-        nidoneButtonQuarter = (Button)findViewById(R.id.NidoneQuarterButton);
-        nidoneButtonOneEighth = (Button)findViewById(R.id.NidoneOneEighth);
-        nidoneButtons = new Button[]{nidoneButtonHalf,nidoneButtonQuarter,nidoneButtonOneEighth};
-        nidoneTimeResetButton = (Button)findViewById(R.id.NidoneTimeResetButton);
+        nidoneButtonHalf = (BootstrapButton)findViewById(R.id.NidoneHalfButton);
+        nidoneButtonQuarter = (BootstrapButton)findViewById(R.id.NidoneQuarterButton);
+        nidoneButtonOneEighth = (BootstrapButton)findViewById(R.id.NidoneOneEighth);
+        nidoneButtons = new BootstrapButton[]{nidoneButtonHalf,nidoneButtonQuarter,nidoneButtonOneEighth};
+        nidoneTimeResetButton = (BootstrapButton)findViewById(R.id.NidoneTimeResetButton);
 
         //テスト
         mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);

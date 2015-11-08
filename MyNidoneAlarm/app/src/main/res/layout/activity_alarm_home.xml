@@ -31,19 +31,7 @@
         android:layout_below="@+id/analogClock"
         android:layout_centerHorizontal="true" />
 
-    <com.beardedhen.androidbootstrap.BootstrapButton
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="起きる"
-        android:id="@+id/TimerButton"
-        android:onClick="OnPushAwakeButton"
-        android:layout_below="@+id/NidoneOneEighth"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        app:bootstrapBrand="primary"
-        app:showOutline="true"
-        app:roundedCorners="true"
-        />
+
 
     <AnalogClock
         android:layout_width="wrap_content"
@@ -53,45 +41,76 @@
         android:layout_below="@+id/imageButton"
         android:layout_centerHorizontal="true" />
 
-    
-    <Button
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10"
-        android:id="@+id/NidoneOneEighth"
-        android:onClick="StartTimer"
+        android:id="@+id/timerbuttons"
         android:layout_below="@+id/timer"
-        android:layout_toEndOf="@+id/timer"
-        android:layout_alignBottom="@+id/NidoneQuarterButton"
-        android:layout_toRightOf="@+id/timer" />
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/TimerButton">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="20"
-        android:id="@+id/NidoneHalfButton"
-        android:onClick="StartTimer"
-        android:layout_below="@+id/timer"
-        android:layout_toLeftOf="@+id/timer"
-        android:layout_toStartOf="@+id/timer" />
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10"
+            android:id="@+id/NidoneOneEighth"
+            android:onClick="StartTimer"
+            android:layout_below="@+id/timer"
+            android:layout_alignBottom="@+id/NidoneQuarterButton"
+            android:layout_alignEnd="@+id/TimerButton"
+            android:layout_toEndOf="@+id/timer"
+            app:showOutline="false"
+            app:roundedCorners="true"
+            android:layout_weight="1"
+            />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="30"
-        android:id="@+id/NidoneQuarterButton"
-        android:onClick="StartTimer"
-        android:layout_below="@+id/timer"
-        android:layout_centerHorizontal="true" />
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20"
+            android:id="@+id/NidoneHalfButton"
+            android:onClick="StartTimer"
+            android:layout_below="@+id/timer"
+            android:layout_alignParentStart="true"
+            app:showOutline="false"
+            app:roundedCorners="true"
+            android:layout_above="@+id/TimerButton"
+            android:layout_toStartOf="@+id/timer"
+            android:layout_weight="1"
+            />
 
-    <Button
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30"
+            android:id="@+id/NidoneQuarterButton"
+            android:onClick="StartTimer"
+            app:showOutline="false"
+            app:roundedCorners="true"
+            android:layout_below="@+id/timer"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="二度寝時間再設定"
         android:id="@+id/NidoneTimeResetButton"
         android:visibility="invisible"
-        android:layout_above="@+id/TimerButton"
-        android:layout_alignRight="@+id/imageButton"
-        android:layout_alignEnd="@+id/imageButton" />
+        android:layout_below="@+id/analogClock"
+        android:layout_alignEnd="@+id/TimerButton" />
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="起きる"
+        android:id="@+id/TimerButton"
+        android:onClick="OnPushAwakeButton"
+        app:showOutline="true"
+        app:roundedCorners="true"
+        android:layout_below="@+id/timerbuttons"
+        android:layout_alignEnd="@+id/imageButton"
+        android:layout_marginTop="37dp" />
 
 </RelativeLayout>
