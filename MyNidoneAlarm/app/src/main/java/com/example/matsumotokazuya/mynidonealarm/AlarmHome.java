@@ -99,12 +99,13 @@ public class AlarmHome extends AppCompatActivity{
 
         notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-       StatusBarNotification[] activeNotifs = notificationManager.getActiveNotifications();
         Intent openIntent = getIntent();
         //アラームが鳴っているかを判定
         isAlarmRinging = openIntent.getIntExtra("isAlarmRinging",0);
         if(isAlarmRinging == 1){
             LogUtil.LogString("alarm is ringing");
+            SetNidoneButtonsTime();
+            isAlarmRinging = 0;
         }else{
             LogUtil.LogString("alarm not ring");
         }
@@ -389,7 +390,7 @@ public class AlarmHome extends AppCompatActivity{
     }
 
     public void SetNidoneButtonsTime(){
-        int[] times = NidoneCaliculator.CalcNidoneTimes(yabaCalendarDate);
+        int[] times = NidoneCaliculator.CalcNidoneTimes(NidoneAlarmManager.yabaCalendarDate);
         for (int i = 0;i<=2;i++) {
             nidoneButtons[i].setText(ParseUtil.ParseIntToString(times[i]));
             if(times[i] == 0){

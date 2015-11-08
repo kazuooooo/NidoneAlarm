@@ -75,7 +75,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         // ロック外したらメインアクティビティが起動する
         Intent appopenintent = new Intent(context, AlarmHome.class);
         appopenintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("isAlarmRinging", 1);
+        appopenintent.putExtra("isAlarmRinging", 1);
         context.startActivity(appopenintent);
 
         // 古い通知を削除

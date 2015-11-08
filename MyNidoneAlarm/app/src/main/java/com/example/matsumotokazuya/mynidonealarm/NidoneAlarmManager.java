@@ -44,7 +44,7 @@ public class NidoneAlarmManager {
     private int d_intentId;
     private HashMap<String,Boolean> DOWMap;
 
-    Calendar yabaCalendarDate;
+    public static  Calendar yabaCalendarDate;
     //Context
     Context appContext;
 
